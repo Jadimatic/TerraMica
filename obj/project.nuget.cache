@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "b0fju+tcn656QFbUtDeYkuHM1Kb3iEK76Snfw5P+/D8Ekb5t4FK89g1EFvzNvMS19YZUz7ObxCXAsOF034pI+w==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\fammi\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\TerraMica\\TerraMica.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\fammi\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
+  ],
+  "logs": []
+}
