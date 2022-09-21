@@ -38,7 +38,7 @@ namespace TerraMica.Content.Items.Weapons
 			Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
 			Item.SetWeaponValues(14, 6f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
 			Item.shootSpeed = 0.5f;
-			Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(30, 0)); // A special method that sets the rarity and value.
+			Item.SetShopValues(ItemRarityColor.White0, Item.buyPrice(10, 0)); // A special method that sets the rarity and value.
 			Item.channel = true; // Channel is important for our projectile.
 
 			// This will make sure our projectile completely disappears on hurt.
@@ -64,8 +64,9 @@ namespace TerraMica.Content.Items.Weapons
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.CopperBar, 1); //add 12 wood to this recipe later, also add leather for the grips, this will also make it harder to obtain
-			recipe.AddTile(TileID.WorkBenches);
+			recipe.AddIngredient(ItemID.CopperBar, 3); //add 12 wood to this recipe later, also add leather for the grips, this will also make it harder to obtain
+            recipe.AddIngredient(ItemID.Wood, 10);
+            recipe.AddTile(TileID.Anvils);
 			recipe.Register();
 		}
 	}

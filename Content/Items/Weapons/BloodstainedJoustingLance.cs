@@ -14,20 +14,22 @@ namespace TerraMica.Content.Items.Weapons
 {
 	public class BloodstainedJoustingLance : ModItem
 	{
-		public override void SetStaticDefaults() {
+		public override void SetStaticDefaults() 
+		{
 			// The (English) text shown below your weapon's name. "ItemTooltip.HallowJoustingLance" will automatically be translated to "Build momentum to increase attack power".
-			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.HallowJoustingLance") + "\nThis is a modded jousting lance.");
+			Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.HallowJoustingLance"));
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1; // The number of sacrifices that is required to research the item in Journey Mode.
 		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults() 
+		{
 			Item.CloneDefaults(ItemID.ShadowJoustingLance);
 			Item.DefaultToSpear(ModContent.ProjectileType<Projectiles.Weapons.BloodstainedJoustingLanceProjectile>(), 1f, 24);
 			//Item.DamageType = DamageClass.MeleeNoSpeed; // We need to use MeleeNoSpeed here so that attack speed doesn't effect our held projectile.
 			Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
 			Item.SetWeaponValues(115, 12f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
-			Item.SetShopValues(ItemRarityColor.LightRed4, Item.buyPrice(0, 6)); // A special method that sets the rarity and value.
+			Item.SetShopValues(ItemRarityColor.LightRed4, Item.buyPrice(2, 40, 0)); // A special method that sets the rarity and value.
 			Item.channel = true; // Channel is important for our projectile.
 		}
 
@@ -47,10 +49,9 @@ namespace TerraMica.Content.Items.Weapons
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.CopperOre, 4); //add 12 wood to this recipe later, also add leather for the grips, this will also make it harder to obtain
-			recipe.AddIngredient(ItemID.Leather, 6);
-			recipe.AddRecipeGroup(RecipeGroupID.Wood, 9);
-			recipe.AddTile(TileID.WorkBenches);
+			recipe.AddIngredient(ItemID.CrimtaneBar, 12); //add 12 wood to this recipe later, also add leather for the grips, this will also make it harder to obtain
+			recipe.AddIngredient(ItemID.SoulofNight, 10);
+			recipe.AddTile(TileID.MythrilAnvil);
 			recipe.Register();
 		}
 	}

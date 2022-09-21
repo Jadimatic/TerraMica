@@ -14,15 +14,14 @@ using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
 using TerraMica.Common;
 
-
-
 namespace TerraMica.Content.Items.Accessories
 {
 	[AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
 	public class ExampleShield : ModItem
 	{
-		public const int Base_Damage = 8;
-		public override void SetStaticDefaults()
+        public const int Base_Damage = 8;
+
+        public override void SetStaticDefaults()
 		{
 			Tooltip.SetDefault("Increases melee damage by 20%\nAllows the player to dash into the enemy\nDouble tap a direction");
 
@@ -34,9 +33,8 @@ namespace TerraMica.Content.Items.Accessories
 		{
 			Item.width = 24;
 			Item.height = 28;
-			Item.value = Item.buyPrice(10);
-			Item.rare = ItemRarityID.Green;
-			Item.accessory = true;
+            Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(20, 0));
+            Item.accessory = true;
 
 			Item.defense = 1;
 			//Item.lifeRegen = 10;
@@ -50,7 +48,7 @@ namespace TerraMica.Content.Items.Accessories
 		{
 			//player.dashType = 2;
 			player.GetDamage(ModContent.GetInstance<PiercingDamageClass>()) += 0.2f; // Increase ALL player damage by 20%
-			player.endurance = 1f - (0.1f * (1f - player.endurance));  // The percentage of damage reduction
+			player.endurance = 1f - (0.1f * (1f - player.endurance));  // The percentage of damage reduction // Damage reduction is not stated in the tooltip. Remove?
 			player.GetModPlayer<TerraMicaPlayer>().DashAccessoryEquipped = true;
 		}
 

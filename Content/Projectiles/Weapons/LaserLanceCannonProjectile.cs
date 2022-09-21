@@ -20,6 +20,7 @@ namespace TerraMica.Content.Projectiles.Weapons
         public int ProjDamage = 1; // frames remaining till we can fire a projectile again
         public override void SetDefaults()
         {
+            //DisplayName.SetDefault("Laser Lance Cannon");
             Projectile.netImportant = true; // Sync this projectile if a player joins mid game.
             Projectile.aiStyle = -1;
             AIType = ProjectileID.ShadowJoustingLance;
@@ -36,11 +37,11 @@ namespace TerraMica.Content.Projectiles.Weapons
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner]; // Get the owner of the projectile.
-            if (Main.myPlayer == Projectile.owner && Main.player[Projectile.owner].statManaMax2 > 1)
+            if (Main.myPlayer == Projectile.owner)
             {
                 if (ProjDelay > 0)
                 {
-                    ProjDelay --;
+                    ProjDelay--;
                 }
                 if (ProjDelay <= 0)
                 {
@@ -55,7 +56,7 @@ namespace TerraMica.Content.Projectiles.Weapons
                 Projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>();
                 //Main.player[Projectile.owner].statManaMax2 -= 1;
             }*/
-            
+
             Projectile.direction = owner.direction; // Direction will be -1 when facing left and +1 when facing right. 
             owner.heldProj = Projectile.whoAmI; // Set the owner's held projectile to this projectile. heldProj is used so that the projectile will be killed when the player drops or swap items.
 

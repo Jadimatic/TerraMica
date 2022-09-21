@@ -31,7 +31,7 @@ namespace TerraMica.Content.Items.Weapons
             Item.knockBack = 3.5f;
             Item.value = Item.buyPrice(0, 2, 0, 0);
             Item.rare = ItemRarityID.Blue;
-            Item.UseSound = new SoundStyle?((SoundStyle)SoundID.Item117);
+            Item.UseSound = new SoundStyle?(SoundID.Item117);
             Item.autoReuse = true;
             Item.shootSpeed = 12.0f;
             Item.shoot = ModContent.ProjectileType<LaserLanceLaser>();
@@ -41,7 +41,7 @@ namespace TerraMica.Content.Items.Weapons
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            for (int index = 0; index < 3; ++index)
+            for (int index = 0; index < 1; ++index)
                 Projectile.NewProjectile((IEntitySource)source, position, velocity, type, damage, knockback, (int)((Entity)player).whoAmI, 0.0f, 0.0f);
             return false;
         }
