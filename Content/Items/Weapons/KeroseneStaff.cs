@@ -19,27 +19,24 @@ namespace TerraMica.Content.Items.Weapons
         public override void SetStaticDefaults()
         {
             // The (English) text shown below your weapon's name. "ItemTooltip.HallowJoustingLance" will automatically be translated to "Build momentum to increase attack power".
-            Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.HallowJoustingLance") + "\nUnleashes a powerful jet fuel ghost");
+            Tooltip.SetDefault(Language.GetTextValue("ItemTooltip.HallowJoustingLance") + "\nUnleashes powerful jet fuel ghosts");
 
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1; // The number of sacrifices that is required to research the item in Journey Mode.
         }
 
         public override void SetDefaults()
         {
+            Item.CloneDefaults(ItemID.JoustingLance);
 
-            // A special method that sets a variety of item parameters that make the item act like a spear weapon.
-            // To see everything DefaultToSpear() does, right click the method in Visual Studios and choose "Go To Definition" (or press F12).
-            // The shoot speed will affect how far away the projectile spawns from the player's hand.
-            // If you are using the custom AI in your projectile (and not aiStyle 19 and AIType = ProjectileID.JoustingLance), the standard value is 1f.
-            // If you are using aiStyle 19 and AIType = ProjectileID.JoustingLance, then multiply the value by about 3.5f.
             Item.DefaultToSpear(ModContent.ProjectileType<KeroseneStaffProjectile>(), 1f, 24);
-
-            //Item.DamageType = DamageClass.MeleeNoSpeed; // We need to use MeleeNoSpeed here so that attack speed doesn't effect our held projectile.
             Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
-            Item.SetWeaponValues(25, 6f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
-            Item.shootSpeed = 0.5f;
+            Item.SetWeaponValues(40, 11f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
+            //Item.shootSpeed = 0.5f;
             Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(35, 0)); // A special method that sets the rarity and value.
             Item.channel = true; // Channel is important for our projectile.
+
+            
+
 
             // This will make sure our projectile completely disappears on hurt.
             // It's not enough just to stop the channel, as the lance can still deal damage while being stowed

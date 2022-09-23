@@ -16,14 +16,14 @@ namespace TerraMica.Content.Projectiles.Weapons
 {
     internal class KeroseneStaffProjectile : ModProjectile
     {
-        public int ProjDelay = 60; // frames remaining till we can fire a projectile again
-        public int ProjDamage = 25; // frames remaining till we can fire a projectile again
+        public int ProjDelay = 15; // frames remaining till we can fire a projectile again
+        public int ProjDamage = 50; // frames remaining till we can fire a projectile againr
         public override void SetDefaults()
         {
             //DisplayName.SetDefault("Laser Lance Cannon");
             Projectile.netImportant = true; // Sync this projectile if a player joins mid game.
             Projectile.aiStyle = -1;
-            AIType = ProjectileID.ShadowJoustingLance;
+            AIType = ProjectileID.JoustingLance;
             Projectile.alpha = 255; // The transparency of the projectile, 255 for completely transparent. Our projectile will fade in (see the AI() below).
             Projectile.friendly = true; // Player shot projectile. Does damage to enemies but not to friendly Town NPCs.
             Projectile.penetrate = -1; // Infinite penetration. The projectile can hit an infinite number of enemies.
@@ -45,9 +45,9 @@ namespace TerraMica.Content.Projectiles.Weapons
                 }
                 if (ProjDelay <= 0)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(null), Projectile.Center, Projectile.velocity * +50, ModContent.ProjectileType<JetFuelGhost>(), ProjDamage, 1f, Main.myPlayer, -1, -1);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(null), Projectile.Center, Projectile.velocity * +25, ModContent.ProjectileType<JetFuelGhost>(), ProjDamage, 1f, Main.myPlayer, -1, -1);
                     SoundEngine.PlaySound(Main.rand.NextBool() ? SoundID.Item157 : SoundID.Item158, Projectile.position);
-                    ProjDelay = 60;
+                    ProjDelay = 30;
                 }
             }
             /*if (Main.player[Projectile.owner].statManaMax2 > 1)

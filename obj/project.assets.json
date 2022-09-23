@@ -37,11 +37,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\fammi\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\terramica\\terramica.csproj",
+      "projectUniqueName": "C:\\Users\\fammi\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\TerraMica\\TerraMica.csproj",
       "projectName": "terramica",
-      "projectPath": "C:\\Users\\fammi\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\terramica\\terramica.csproj",
+      "projectPath": "C:\\Users\\fammi\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\TerraMica\\TerraMica.csproj",
       "packagesPath": "C:\\Users\\fammi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fammi\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\terramica\\obj\\",
+      "outputPath": "C:\\Users\\fammi\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\TerraMica\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

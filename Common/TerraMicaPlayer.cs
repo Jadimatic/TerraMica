@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,12 +11,15 @@ using TerraMica.Content.Items.Accessories;
 using TerraMica.Content.Items.Weapons;
 using Terraria;
 using Terraria.ModLoader;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace TerraMica.Common
 {
     public class TerraMicaPlayer : ModPlayer
     {
         public bool moddedLances;
+        public bool betterOiled;
+        public int lifeRegenExpectedLossPerSecond = -1;
         // These indicate what direction is what in the timer arrays used
         public const int DashDown = 0;
         public const int DashUp = 1;
@@ -40,11 +44,13 @@ namespace TerraMica.Common
         public override void UpdateDead()
         {
             moddedLances = false;
+            betterOiled = false;
         }
 
         public override void ResetEffects()
         {
             moddedLances = false;
+            betterOiled = false;
             // Reset our equipped flag. If the accessory is equipped somewhere, ExampleShield.UpdateAccessory will be called and set the flag before PreUpdateMovement
             DashAccessoryEquipped = false;
 
@@ -212,6 +218,22 @@ namespace TerraMica.Common
                 Player.channel = false;
                 Player.itemAnimation = 0;
                 Player.itemAnimationMax = 0;
+            }
+        }
+
+        public override void UpdateBadLifeRegen()
+        {
+            if (betterOiled && (Player.onFire || Player.onFire2 || Player.onFire3 || Player.onFrostBurn || Player.onFrostBurn2))
+            {
+                if (Player.lifeRegen > 0)
+                {
+                    Player.lifeRegen = 0;
+                }
+                Player.lifeRegen -= 50;
+                if (lifeRegenExpectedLossPerSecond < 10)
+                {
+                    lifeRegenExpectedLossPerSecond = 10;
+                }
             }
         }
     }
