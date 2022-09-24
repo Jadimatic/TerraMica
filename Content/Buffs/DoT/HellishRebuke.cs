@@ -4,7 +4,7 @@ using Terraria.ID;
 using TerraMica.Common;
 using IL.Terraria.DataStructures;
 
-namespace TerraMica.Content.Buffs.Misc
+namespace TerraMica.Content.Buffs.DoT
 {
     public class HellishRebuke : ModBuff
     {
