@@ -23,7 +23,9 @@ namespace TerraMica.Common
         {
             if (npc.oiled && hellishRebuke)
             {
-                if (npc.lifeRegen > 0)
+                damage = 10;
+                npc.lifeRegen -= 50;
+                /*if (npc.lifeRegen > 0)
                 {
                     npc.lifeRegen = 0;
                 }
@@ -31,14 +33,21 @@ namespace TerraMica.Common
                 if (lifeRegenExpectedLossPerSecond < 10)
                 {
                     lifeRegenExpectedLossPerSecond = 10;
-                }
+                }*/
             }
             if (hellishRebuke)
             {
-                if (npc.lifeRegen > 0)
-                    npc.lifeRegen = 0;
+                damage = 10;
                 npc.lifeRegen -= 40;
-                lifeRegenExpectedLossPerSecond = 5;
+                /*if (npc.lifeRegen > 0)
+                {
+                    npc.lifeRegen = 0;
+                }
+                npc.lifeRegen -= 40;
+                if (lifeRegenExpectedLossPerSecond < 10)
+                {
+                    lifeRegenExpectedLossPerSecond = 10;
+                }*/
             }
         }
         public override void DrawEffects(NPC npc, ref Color drawColor)

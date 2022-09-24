@@ -1,0 +1,5 @@
+C:\Users\fammi\Documents\My Games\Terraria\tModLoader\ModSources\TerraMica\obj\Debug\net6.0\TerraMica.csproj.AssemblyReference.cache
+C:\Users\fammi\Documents\My Games\Terraria\tModLoader\ModSources\TerraMica\obj\Debug\net6.0\TerraMica.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fammi\Documents\My Games\Terraria\tModLoader\ModSources\TerraMica\obj\Debug\net6.0\TerraMica.AssemblyInfoInputs.cache
+C:\Users\fammi\Documents\My Games\Terraria\tModLoader\ModSources\TerraMica\obj\Debug\net6.0\TerraMica.AssemblyInfo.cs
+C:\Users\fammi\Documents\My Games\Terraria\tModLoader\ModSources\TerraMica\obj\Debug\net6.0\TerraMica.csproj.CoreCompileInputs.cache

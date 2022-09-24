@@ -23,10 +23,11 @@ namespace TerraMica.Common
 {
     public class TerraMicaPlayer : ModPlayer
     {
-        public bool moddedLances;
         public bool betterOiled;
         public bool overHeated;
         public bool hellishRebuke;
+        public bool stickyFingers;
+        public bool aeroGel;
         public int lifeRegenExpectedLossPerSecond = -1;
         // These indicate what direction is what in the timer arrays used
         public const int DashDown = 0;
@@ -44,27 +45,29 @@ namespace TerraMica.Common
         public int DashDir = -1;
 
         // The fields related to the dash accessory
-        public bool DashAccessoryEquipped;
+        public bool rusticShield;
         public int DashDelay = 0; // frames remaining till we can dash again
         public int DashTimer = 0; // frames remaining in the dash
         public bool DashHit = false; // if contact is made
 
         public override void UpdateDead()
         {
-            moddedLances = false;
             betterOiled = false;
             overHeated = false;
             hellishRebuke = false;
+            stickyFingers = false;
+            aeroGel = false;
         }
 
         public override void ResetEffects()
         {
-            moddedLances = false;
             betterOiled = false;
             overHeated = false;
             hellishRebuke = false;
+            stickyFingers = false;
+            aeroGel = false;
             // Reset our equipped flag. If the accessory is equipped somewhere, ExampleShield.UpdateAccessory will be called and set the flag before PreUpdateMovement
-            DashAccessoryEquipped = false;
+            rusticShield = false;
 
             // ResetEffects is called not long after player.doubleTapCardinalTimer's values have been set
             // When a directional key is pressed and released, vanilla starts a 15 tick (1/4 second) timer during which a second press activates a dash
@@ -168,7 +171,7 @@ namespace TerraMica.Common
                         Rectangle rect = nPC.getRect();
                         if (rectangle.Intersects(rect) && (nPC.noTileCollide || Player.CanHit(nPC)))
                         {
-                            float num = Player.GetTotalDamage(DamageClass.Melee).ApplyTo(ExampleShield.Base_Damage);
+                            float num = Player.GetTotalDamage(DamageClass.Melee).ApplyTo(8);
                             float num12 = Player.GetTotalKnockback(DamageClass.Melee).ApplyTo(9f);
                             bool crit = false;
                             if ((float)Main.rand.Next(100) < Player.GetTotalCritChance(DamageClass.Melee))
@@ -210,7 +213,7 @@ namespace TerraMica.Common
 
         private bool CanUseDash()
         {
-            return DashAccessoryEquipped
+            return rusticShield
                 && Player.dashType == 0 // player doesn't have Tabi or EoCShield equipped (give priority to those dashes)
                 && !Player.setSolar // player isn't wearing solar armor
                 && !Player.mount.Active; // player isn't mounted, since dashes on a mount look weird
@@ -226,7 +229,7 @@ namespace TerraMica.Common
             int Kerosene = ModContent.ItemType<KeroseneStaff>();
             int Example = ModContent.ItemType<ExampleSword>();
 
-            if (Player.inventory[Player.selectedItem].type == Copper || Player.inventory[Player.selectedItem].type == Bloodstained || Player.inventory[Player.selectedItem].type == Laser || Player.inventory[Player.selectedItem].type == Kerosene || Player.inventory[Player.selectedItem].type == Example)
+            if (Player.inventory[Player.selectedItem].type == Copper && !stickyFingers || Player.inventory[Player.selectedItem].type == Bloodstained && !stickyFingers || Player.inventory[Player.selectedItem].type == Laser && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !overHeated || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers || Player.inventory[Player.selectedItem].type == Example && !stickyFingers)
             {
                 Player.channel = false;
                 Player.itemAnimation = 0;
@@ -234,7 +237,7 @@ namespace TerraMica.Common
             }
         }
 
-        public override void UpdateBadLifeRegen()
+        public override void UpdateLifeRegen()
         {
             if (betterOiled && (Player.onFire || Player.onFire2 || Player.onFire3 || Player.onFrostBurn || Player.onFrostBurn2 || hellishRebuke))
             {
@@ -261,6 +264,33 @@ namespace TerraMica.Common
                 lifeRegenExpectedLossPerSecond = 5;
             }
         }
+        /*public override void UpdateBadLifeRegen()
+        {
+            if (betterOiled && (Player.onFire || Player.onFire2 || Player.onFire3 || Player.onFrostBurn || Player.onFrostBurn2 || hellishRebuke))
+            {
+                if (Player.lifeRegen > 0)
+                {
+                    Player.lifeRegen = 0;
+                }
+                Player.lifeRegen -= 50;
+                if (lifeRegenExpectedLossPerSecond < 10)
+                {
+                    lifeRegenExpectedLossPerSecond = 10;
+                }
+            }
+            if (hellishRebuke)
+            {
+                // These lines zero out any positive lifeRegen. This is expected for all bad life regeneration effects
+                if (Player.lifeRegen > 0)
+                    Player.lifeRegen = 0;
+                // Player.lifeRegenTime uses to increase the speed at which the player reaches its maximum natural life regeneration
+                // So we set it to 0, and while this debuff is active, it never reaches it
+                Player.lifeRegenTime = 0;
+                // lifeRegen is measured in 1/2 life per second. Therefore, this effect causes 8 life lost per second
+                Player.lifeRegen -= 40;
+                lifeRegenExpectedLossPerSecond = 5;
+            }
+        }*/
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
 			if (hellishRebuke) 
@@ -280,13 +310,13 @@ namespace TerraMica.Common
             if (betterOiled && !Main.rand.NextBool(3)) // Please re-do this if you have time so it's more like the one above lol
             {
                 int num = 175;
-                Color newColor = new Color(0, 0, 0, 140);
+                Color newColor = new(0, 0, 0, 140);
                 Vector2 vector = Player.position;
                 vector.X -= 2f;
                 vector.Y -= 2f;
                 if (Main.rand.NextBool(2))
                 {
-                    Dust dust8 = Dust.NewDustDirect(vector, Player.width + 4, Player.height + 2, 4, 0f, 0f, num, newColor, 1.4f);
+                    Dust dust8 = Dust.NewDustDirect(vector, Player.width + 4, Player.height + 2, DustID.TintableDust, 0f, 0f, num, newColor, 1.4f);
                     if (Main.rand.NextBool(2))
                     {
                         dust8.alpha += 25;
@@ -310,6 +340,16 @@ namespace TerraMica.Common
         public override void OnHitPvp(Item item, Player target, int damage, bool crit)
         {
             if ((item.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated)
+                target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
+        }
+        public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
+        {
+            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated)
+                target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
+        }
+        public override void OnHitPvpWithProj(Projectile proj, Player target, int damage, bool crit)
+        {
+            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated)
                 target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
         }
     }

@@ -11,7 +11,7 @@ namespace TerraMica.Content.Buffs.Misc
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Overheated");
-            Description.SetDefault("Your weapon has overheated\nand needs to cool off");
+            Description.SetDefault("Your weapon has overheated and needs to cool off");
             Main.debuff[Type] = true;
         }
 
@@ -19,6 +19,7 @@ namespace TerraMica.Content.Buffs.Misc
         {
             TerraMicaPlayer modPlayer = player.GetModPlayer<TerraMicaPlayer>();
             modPlayer.overHeated = true;
+            player.buffImmune[ModContent.BuffType<OverheatTimer>()] = true;
         }
     }
 }

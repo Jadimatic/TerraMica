@@ -15,7 +15,7 @@ namespace TerraMica.Content.Projectiles.Weapons
 {
     public class JetFuelGhost : ModProjectile
     {
-        public const float lifeTime = 85f;
+        public const float lifeTime = 170f;
         ref float ProjLife => ref Projectile.ai[0];
         public override void SetStaticDefaults()
         {

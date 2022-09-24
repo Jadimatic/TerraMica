@@ -71,7 +71,8 @@ namespace TerraMica.Content.Projectiles.Weapons
 
 			// Fade the projectile in when it first spawns
 			Projectile.alpha -= 40;
-			if (Projectile.alpha < 0) {
+			if (Projectile.alpha < 0) 
+			{
 				Projectile.alpha = 0;
 			}
 
@@ -85,13 +86,16 @@ namespace TerraMica.Content.Projectiles.Weapons
 			
 			float playerVelocity = owner.velocity.Length();
 
-			if (playerVelocity > minimumDustVelocity && movementInLanceDirection > 0.8f) {
+			if (playerVelocity > minimumDustVelocity && movementInLanceDirection > 0.8f) 
+			{
 				// The chance for the dust to spawn. The actual chance (see below) is 1/dustChance. We make the chance higher the faster the player is moving by making the denominator smaller.
 				int dustChance = 8;
-				if (playerVelocity > minimumDustVelocity + 1f) {
+				if (playerVelocity > minimumDustVelocity + 1f) 
+				{
 					dustChance = 5;
 				}
-				if (playerVelocity > minimumDustVelocity + 2f) {
+				if (playerVelocity > minimumDustVelocity + 2f) 
+				{
 					dustChance = 2;
 				}
 
@@ -102,7 +106,8 @@ namespace TerraMica.Content.Projectiles.Weapons
 				int offset = 4; // This offset will affect how much the dust spreads out.
 
 				// Spawn the dusts based on the dustChance. The dusts are spawned at the tip of the Jousting Lance.
-				if (Main.rand.NextBool(dustChance)) {
+				if (Main.rand.NextBool(dustChance)) 
+				{
 					int newDust = Dust.NewDust(Projectile.Center - new Vector2(offset, offset), offset * 2, offset * 2, dustTypeCommon, Projectile.velocity.X * 0.2f + (Projectile.direction * 3), Projectile.velocity.Y * 0.2f, 100, default, 1.2f);
 					Main.dust[newDust].noGravity = true;
 					Main.dust[newDust].velocity *= 0.25f;
@@ -110,21 +115,24 @@ namespace TerraMica.Content.Projectiles.Weapons
 					Main.dust[newDust].velocity *= 0.25f;
 				}
 
-				if (Main.rand.NextBool(dustChance + 3)) {
+				if (Main.rand.NextBool(dustChance + 3)) 
+				{
 					Dust.NewDust(Projectile.Center - new Vector2(offset, offset), offset * 2, offset * 2, dustTypeRare, 0f, 0f, 150, default, 1.4f);
 				}
 			}
 		}
 
 		// This will increase or decrease the knockback of the Jousting Lance depending on how fast the player is moving.
-		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection) {
+		public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection) 
+		{
 			if (damage > 0) {
 				knockback *= Main.player[Projectile.owner].velocity.Length() / 7f;
 			}
 		}
 
 		// This will increase or decrease the damage of the Jousting Lance depending on how fast the player is moving.
-		public override void ModifyDamageScaling(ref float damageScale) {
+		public override void ModifyDamageScaling(ref float damageScale) 
+		{
 			damageScale *= 0.1f + Main.player[Projectile.owner].velocity.Length() / 7f * 0.9f;
 		}
 
@@ -139,7 +147,7 @@ namespace TerraMica.Content.Projectiles.Weapons
 			// You will need to modify the last two numbers if you have a bigger or smaller Jousting Lance.
 			// Vanilla uses (0, 0, 300, 300) which that is quite large for the size of the Jousting Lance.
 			// The size doesn't matter too much because this rectangle is only a basic check for the collision (the hit-line is much more important).
-			Rectangle lanceHitboxBounds = new Rectangle(0, 0, 300, 300);
+			Rectangle lanceHitboxBounds = new(0, 0, 300, 300);
 
 			// Set the position of the large rectangle.
 			lanceHitboxBounds.X = (int)Projectile.position.X - lanceHitboxBounds.Width / 2;

@@ -26,7 +26,7 @@ namespace TerraMica.Content.Items.Weapons
 			Item.useStyle = ItemUseStyleID.Rapier;
 			Item.knockBack = 4f;
 			Item.value = Item.buyPrice(gold: 20);
-			Item.rare = 2;
+			Item.rare = ItemRarityID.Green;
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
 

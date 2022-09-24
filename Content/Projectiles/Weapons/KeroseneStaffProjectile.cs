@@ -11,11 +11,13 @@ using TerraMica.Common;
 using Mono.Cecil;
 using static Terraria.ModLoader.PlayerDrawLayer;
 using Terraria.Audio;
+using TerraMica.Content.Buffs.Misc;
 
 namespace TerraMica.Content.Projectiles.Weapons
 {
     internal class KeroseneStaffProjectile : ModProjectile
     {
+        public int charge = 10;
         public int ProjDelay = 15; // frames remaining till we can fire a projectile again
         public int ProjDamage = 50; // frames remaining till we can fire a projectile againr
         public override void SetDefaults()
@@ -37,7 +39,7 @@ namespace TerraMica.Content.Projectiles.Weapons
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner]; // Get the owner of the projectile.
-            if (Main.myPlayer == Projectile.owner)
+            if (Main.myPlayer == Projectile.owner && !owner.buffImmune[ModContent.BuffType<OverheatTimer>()])
             {
                 if (ProjDelay > 0)
                 {
@@ -45,9 +47,15 @@ namespace TerraMica.Content.Projectiles.Weapons
                 }
                 if (ProjDelay <= 0)
                 {
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(null), Projectile.Center, Projectile.velocity * +25, ModContent.ProjectileType<JetFuelGhost>(), ProjDamage, 1f, Main.myPlayer, -1, -1);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(null), Projectile.Center, Projectile.velocity * +12, ModContent.ProjectileType<JetFuelGhost>(), ProjDamage, 1f, Main.myPlayer, -1, -1);
                     SoundEngine.PlaySound(Main.rand.NextBool() ? SoundID.Item157 : SoundID.Item158, Projectile.position);
                     ProjDelay = 30;
+                    charge--;
+                    if (charge <= 0)
+                    {
+                        owner.AddBuff(ModContent.BuffType<Overheated>(), 900);
+                        charge = 10;
+                    }
                 }
             }
             /*if (Main.player[Projectile.owner].statManaMax2 > 1)
@@ -129,8 +137,8 @@ namespace TerraMica.Content.Projectiles.Weapons
                 Projectile.direction = owner.direction;
                 owner.heldProj = Projectile.whoAmI;
                 // Set your dust types here.
-                int dustTypeCommon = DustID.MeteorHead;
-                int dustTypeRare = DustID.Meteorite;
+                int dustTypeCommon = DustID.Wraith;
+                int dustTypeRare = DustID.SpectreStaff;
 
 
                 // Spawn the dusts based on the dustChance. The dusts are spawned at the tip of the Jousting Lance.
