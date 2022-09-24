@@ -46,7 +46,7 @@ namespace TerraMica.Content.Items.Accessories
 		public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 1);
+			recipe.AddIngredient(ItemID.Wood, 1);
             recipe.AddIngredient(ItemID.DirtBlock, 1);
             recipe.AddTile(TileID.WorkBenches);
 			recipe.Register();

@@ -228,8 +228,11 @@ namespace TerraMica.Common
             int Laser = ModContent.ItemType<LaserLanceCannon>();
             int Kerosene = ModContent.ItemType<KeroseneStaff>();
             int Example = ModContent.ItemType<ExampleSword>();
+            int Hallowed = ItemID.HallowJoustingLance;
+            int Shadow = ItemID.ShadowJoustingLance;
+            int Jousting = ItemID.JoustingLance;
 
-            if (Player.inventory[Player.selectedItem].type == Copper && !stickyFingers || Player.inventory[Player.selectedItem].type == Bloodstained && !stickyFingers || Player.inventory[Player.selectedItem].type == Laser && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !overHeated || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers && !overHeated || Player.inventory[Player.selectedItem].type == Example && !stickyFingers)
+            if (Player.inventory[Player.selectedItem].type == Copper && !stickyFingers || Player.inventory[Player.selectedItem].type == Bloodstained && !stickyFingers || Player.inventory[Player.selectedItem].type == Laser && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !overHeated || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers && !overHeated || Player.inventory[Player.selectedItem].type == Example && !stickyFingers || Player.inventory[Player.selectedItem].type == Hallowed && !stickyFingers || Player.inventory[Player.selectedItem].type == Shadow && !stickyFingers || Player.inventory[Player.selectedItem].type == Jousting && !stickyFingers)
             {
                 Player.channel = false;
                 Player.itemAnimation = 0;

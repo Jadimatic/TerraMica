@@ -132,14 +132,18 @@ namespace TerraMica.Content.Projectiles.Weapons
                 Projectile.direction = owner.direction;
                 owner.heldProj = Projectile.whoAmI;
                 // Set your dust types here.
-                int dustTypeCommon = 174;//Dungeon Inferno Enemies
-                int dustTypeRare = 127;//Flare Trail
+                int dustTypeCommon;
+                int dustTypeRare;
                 if (Main.myPlayer == Projectile.owner && !owner.buffImmune[ModContent.BuffType<OverheatTimer>()])//If the weapon is not Overheated...
                 {
                     dustTypeCommon = DustID.Wraith;
-                    dustTypeRare = DustID.SpectreStaff;
+                    dustTypeRare = DustID.Asphalt;
                 }
-
+                else
+                {
+                    dustTypeCommon = 174; //Dungeon Inferno Enemies
+                    dustTypeRare = 127; //Flare Trail
+                }
 
                 // Spawn the dusts based on the dustChance. The dusts are spawned at the tip of the Jousting Lance.
                 if (Main.rand.NextBool(dustChance))
