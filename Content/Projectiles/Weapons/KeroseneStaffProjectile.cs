@@ -17,7 +17,7 @@ namespace TerraMica.Content.Projectiles.Weapons
 {
     internal class KeroseneStaffProjectile : ModProjectile
     {
-        public int charge = 10;
+        public int charge = 8;
         public int ProjDelay = 15; // frames remaining till we can fire a projectile again
         public int ProjDamage = 50; // frames remaining till we can fire a projectile againr
         public override void SetDefaults()
@@ -54,16 +54,11 @@ namespace TerraMica.Content.Projectiles.Weapons
                     if (charge <= 0)
                     {
                         owner.AddBuff(ModContent.BuffType<Overheated>(), 900);
-                        charge = 10;
+                        SoundEngine.PlaySound(SoundID.Item20, Main.player[Projectile.owner].position);
+                        charge = 8;
                     }
                 }
             }
-            /*if (Main.player[Projectile.owner].statManaMax2 > 1)
-            {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(null), Projectile.Center, new Vector2(1f, 1f), ModContent.ProjectileType<LaserLanceLaser>(), (int)Projectile.damage, (float)Projectile.knockBack, Main.myPlayer, ProjectileID.Bullet, ProjectileID.Bullet);
-                Projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>();
-                //Main.player[Projectile.owner].statManaMax2 -= 1;
-            }*/
 
             Projectile.direction = owner.direction; // Direction will be -1 when facing left and +1 when facing right. 
             owner.heldProj = Projectile.whoAmI; // Set the owner's held projectile to this projectile. heldProj is used so that the projectile will be killed when the player drops or swap items.
@@ -137,8 +132,13 @@ namespace TerraMica.Content.Projectiles.Weapons
                 Projectile.direction = owner.direction;
                 owner.heldProj = Projectile.whoAmI;
                 // Set your dust types here.
-                int dustTypeCommon = DustID.Wraith;
-                int dustTypeRare = DustID.SpectreStaff;
+                int dustTypeCommon = 174;//Dungeon Inferno Enemies
+                int dustTypeRare = 127;//Flare Trail
+                if (Main.myPlayer == Projectile.owner && !owner.buffImmune[ModContent.BuffType<OverheatTimer>()])//If the weapon is not Overheated...
+                {
+                    dustTypeCommon = DustID.Wraith;
+                    dustTypeRare = DustID.SpectreStaff;
+                }
 
 
                 // Spawn the dusts based on the dustChance. The dusts are spawned at the tip of the Jousting Lance.

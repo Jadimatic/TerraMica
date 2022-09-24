@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using static Terraria.ModLoader.PlayerDrawLayer;
 using TerraMica.Content.Buffs.DoT;
+using TerraMica.Content.Projectiles.Weapons;
 
 namespace TerraMica.Common
 {
@@ -218,7 +219,6 @@ namespace TerraMica.Common
                 && !Player.setSolar // player isn't wearing solar armor
                 && !Player.mount.Active; // player isn't mounted, since dashes on a mount look weird
         }
-
         public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
         {
             //int lanceWeapons = TerraMicaLists.ModdedLanceItems;
@@ -229,7 +229,7 @@ namespace TerraMica.Common
             int Kerosene = ModContent.ItemType<KeroseneStaff>();
             int Example = ModContent.ItemType<ExampleSword>();
 
-            if (Player.inventory[Player.selectedItem].type == Copper && !stickyFingers || Player.inventory[Player.selectedItem].type == Bloodstained && !stickyFingers || Player.inventory[Player.selectedItem].type == Laser && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !overHeated || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers || Player.inventory[Player.selectedItem].type == Example && !stickyFingers)
+            if (Player.inventory[Player.selectedItem].type == Copper && !stickyFingers || Player.inventory[Player.selectedItem].type == Bloodstained && !stickyFingers || Player.inventory[Player.selectedItem].type == Laser && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !overHeated || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers && !overHeated || Player.inventory[Player.selectedItem].type == Example && !stickyFingers)
             {
                 Player.channel = false;
                 Player.itemAnimation = 0;
@@ -344,12 +344,12 @@ namespace TerraMica.Common
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
-            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated)
+            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated && !(proj.type == ModContent.ProjectileType<JetFuelGhost>()))
                 target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
         }
         public override void OnHitPvpWithProj(Projectile proj, Player target, int damage, bool crit)
         {
-            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated)
+            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated && !(proj.type == ModContent.ProjectileType<JetFuelGhost>()))
                 target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
         }
     }

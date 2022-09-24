@@ -13,6 +13,7 @@ using TerraMica.Content.Items.Accessories;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
 using TerraMica.Common;
+using System.Drawing.Drawing2D;
 
 namespace TerraMica.Content.Items.Accessories
 {
@@ -24,7 +25,6 @@ namespace TerraMica.Content.Items.Accessories
             Tooltip.SetDefault("Increases piercing damage done while moving\n3% increased movement speed");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
-
 
         public override void SetDefaults()
         {
@@ -38,9 +38,9 @@ namespace TerraMica.Content.Items.Accessories
         {
             player.GetModPlayer<TerraMicaPlayer>().aeroGel = true;
             //player.maxRunSpeed *= 1.3f;
+            //player.slippy2 = true;
         }
 
-        // Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();

@@ -22,7 +22,7 @@ namespace TerraMica.Common
             {
                 if (projectile.DamageType == ModContent.GetInstance<PiercingDamageClass>())
                 {
-                    damageScale *= 0.1f + Main.player[projectile.owner].velocity.Length() / 7f * 1f;
+                    damageScale *= 0.1f + Main.player[projectile.owner].velocity.Length() / 7.25f * 1f;
                 }
             }
         }

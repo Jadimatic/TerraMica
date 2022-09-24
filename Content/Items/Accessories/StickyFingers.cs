@@ -16,7 +16,7 @@ using TerraMica.Common;
 
 namespace TerraMica.Content.Items.Accessories
 {
-    //[AutoloadEquip(EquipType.HandsOn)] // Load the spritesheet you create as a shield for the player when it is equipped.
+    [AutoloadEquip(EquipType.HandsOn)]
     public class StickyFingers : ModItem
     {
         public override void SetStaticDefaults()
