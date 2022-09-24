@@ -17,6 +17,7 @@ using Color = Microsoft.Xna.Framework.Color;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.DataStructures;
 using static Terraria.ModLoader.PlayerDrawLayer;
+using TerraMica.Content.Buffs.DoT;
 
 namespace TerraMica.Common
 {
