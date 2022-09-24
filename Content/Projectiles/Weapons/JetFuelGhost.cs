@@ -41,10 +41,11 @@ namespace TerraMica.Content.Projectiles.Weapons
             Projectile.penetrate = 3;
             Projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>(); // Set the damage to piercing damage.
         }
+        /* Uncomment this if you want to modify color, why you would do that we have no idea.
         public override Color? GetAlpha(Color lightColor)
         {
-            return new Color(255, 255, 0, 0) * Projectile.Opacity;
-        }
+            return new Color(127, 127, 127, 0) * Projectile.Opacity;
+        }*/
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -106,13 +107,13 @@ namespace TerraMica.Content.Projectiles.Weapons
 
         public override void AI()
         {
-			SlotId val;
-			if (ProjLife == 0f)
-			{
-				float[] array = Projectile.localAI;
-				val = SoundEngine.PlaySound(in SoundID.DD2_GhastlyGlaiveImpactGhost, Projectile.Center);
-				array[1] = ((SlotId)(val)).ToFloat();
-			}
+            SlotId val;
+            if (ProjLife == 0f)
+            {
+                float[] array = Projectile.localAI;
+                val = SoundEngine.PlaySound(in SoundID.DD2_GhastlyGlaiveImpactGhost, Projectile.Center);
+                array[1] = ((SlotId)(val)).ToFloat();
+            }
             if (SoundEngine.TryGetActiveSound(SlotId.FromFloat(Projectile.localAI[1]), out var sound))
             {
                 // use "sound" here
@@ -127,47 +128,46 @@ namespace TerraMica.Content.Projectiles.Weapons
                     sound.Position = Projectile.Center;
                 }
             }
-
-
             ProjLife += 1f;
-			if (ProjLife > lifeTime * 0.85f) //if projLife is greater than about 3/4ths of lifeTime...
-			{
-				Projectile.alpha += 25;
-				if (Projectile.alpha > 255)
-				{
-					Projectile.alpha = 255;
-				}
-			}
-			else //begin fading
-			{
-				Projectile.alpha -= ((int)lifeTime * 3 / 2);
-				if (Projectile.alpha < 255)
-				{
-					Projectile.alpha = 127;
-				}
-			}
-			Projectile.velocity *= 0.98f;
-			if (++Projectile.frameCounter >= 5)
-			{
-				Projectile.frameCounter = 0;
-				if (++Projectile.frame >= 4)
-				{
-					Projectile.frame = 0;
-				}
-			}
-			if (ProjLife >= lifeTime)//if Life is equal to or greater than lifeTime than execute contents.
-			{
-				Projectile.Kill();
-			}
-			Projectile.direction = (Projectile.spriteDirection = ((Projectile.velocity.X > 0f) ? 1 : (-1)));
-			Projectile.rotation = Projectile.velocity.ToRotation();
-			if (Projectile.spriteDirection == -1)
-			{
-				Projectile.rotation += (float)Math.PI;
-			}
-			if (ProjLife >= 3 && ProjLife < (lifeTime * 0.8f))//if projectile has existed for three frames but hasnt already existed for about 3/4th's of lifeTime
-			{
-				Vector2 vector = Projectile.velocity.SafeNormalize(Vector2.UnitY);
+            if (ProjLife > lifeTime * 0.85f) //if projLife is greater than about 3/4ths of lifeTime...
+            {
+                Projectile.alpha += 25;
+                if (Projectile.alpha > 255)
+                {
+                    Projectile.alpha = 255;
+                }
+            }
+            else //begin fading
+            {
+                Projectile.alpha -= ((int)lifeTime * 3 / 2);
+                if (Projectile.alpha < 255)
+                {
+                    Projectile.alpha = 127;
+                }
+            }
+            Projectile.velocity *= 0.98f;
+            if (++Projectile.frameCounter >= 5)
+            {
+                Projectile.frameCounter = 0;
+                if (++Projectile.frame >= 4)
+                {
+                    Projectile.frame = 0;
+                }
+            }
+            if (ProjLife >= lifeTime)//if Life is equal to or greater than lifeTime than execute contents.
+            {
+                Projectile.Kill();
+            }
+            Projectile.direction = (Projectile.spriteDirection = ((Projectile.velocity.X > 0f) ? 1 : (-1)));
+            Projectile.rotation = Projectile.velocity.ToRotation();
+            if (Projectile.spriteDirection == -1)
+            {
+                Projectile.rotation += (float)Math.PI;
+            }
+            if (ProjLife >= 3 && ProjLife < (lifeTime * 0.8f))//if projectile has existed for three frames but hasnt already existed for about 3/4th's of lifeTime
+            {
+                /* Uncomment this if you want to modify color, why you would do that we have no idea.
+                 * Vector2 vector = Projectile.velocity.SafeNormalize(Vector2.UnitY);
 				float num = ProjLife / lifeTime;
 				float num2 = 2f;
 				for (int i = 0; (float)i < num2; i++)
@@ -178,8 +178,29 @@ namespace TerraMica.Content.Projectiles.Weapons
 					dust.scale = 1f + 0.6f * Main.rand.NextFloat();
 					dust.velocity += vector * 3f;
 					dust.noGravity = true;
-				}
-			}
-		}
-	}
+				}*/
+                int num = 175;
+                Color newColor = new(0, 0, 0, 140);
+                Vector2 vector2 = Projectile.position;
+                vector2.X -= 2f;
+                vector2.Y -= 2f;
+                if (Main.rand.NextBool(2))
+                {
+                    Dust dust8 = Dust.NewDustDirect(vector2, Projectile.width + 4, Projectile.height + 2, DustID.TintableDust, 0f, 0f, num, newColor, 1.4f);
+                    if (Main.rand.NextBool(2))
+                    {
+                        dust8.alpha += 25;
+                    }
+                    if (Main.rand.NextBool(2))
+                    {
+                        dust8.alpha += 25;
+                    }
+                    dust8.noLight = true;
+                    dust8.velocity *= 0.2f;
+                    dust8.velocity.Y += 0.2f;
+                    dust8.velocity += Projectile.velocity;
+                }
+            }
+        }
+    }
 }

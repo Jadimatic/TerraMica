@@ -46,7 +46,7 @@ namespace TerraMica.Content.Items.Weapons
 			return true;
 		}
 
-		public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
 			recipe.AddIngredient(ItemID.CrimtaneBar, 12); //add 12 wood to this recipe later, also add leather for the grips, this will also make it harder to obtain
