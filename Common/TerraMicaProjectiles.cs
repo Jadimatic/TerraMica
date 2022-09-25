@@ -9,6 +9,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using TerraMica.Common;
 using TerraMica.Content.Projectiles.Weapons;
+using Terraria.Enums;
 
 namespace TerraMica.Common
 {
@@ -24,6 +25,23 @@ namespace TerraMica.Common
                 {
                     damageScale *= 0.1f + Main.player[projectile.owner].velocity.Length() / 7.25f * 1f;
                 }
+            }
+        }
+        public override void SetDefaults(Projectile projectile)
+        {
+            Player player = Main.player[projectile.owner];
+            if (projectile.type == ProjectileID.JoustingLance) //|| projectile.type == ProjectileID.JoustingLance && player.GetModPlayer<TerraMicaPlayer>().stickyFingers)
+            {
+                projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>();
+                //player.GetModPlayer<TerraMicaPlayer>().vanillaLance = true;
+            }
+            if (projectile.type == ProjectileID.ShadowJoustingLance)
+            {
+                projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>();
+            }
+            if (projectile.type == ProjectileID.HallowJoustingLance)
+            {
+                projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>();
             }
         }
     }

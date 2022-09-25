@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using TerraMica.Common;
 using Terraria;
 using Terraria.GameContent;
 using Terraria.ID;
@@ -26,7 +27,7 @@ namespace TerraMica.Content.Projectiles.Weapons
 			Projectile.scale = 1f; // The scale of the projectile. This only effects the drawing and the width of the collision.
 			Projectile.hide = true; // We are drawing the projectile ourself. See PreDraw() below.
 			Projectile.ownerHitCheck = true; // Make sure the owner of the projectile has line of sight to the target (aka can't hit things through tile).
-			Projectile.DamageType = DamageClass.MeleeNoSpeed; // Set the damage to melee damage.
+			Projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>(); ; // Set the damage to melee damage.
 		}
 
 

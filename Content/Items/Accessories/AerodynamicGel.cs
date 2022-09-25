@@ -37,8 +37,8 @@ namespace TerraMica.Content.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<TerraMicaPlayer>().aeroGel = true;
-            //player.maxRunSpeed *= 1.3f;
-            //player.slippy2 = true;
+            player.maxRunSpeed *= 1.03f;
+            player.slippy = true;
         }
 
         public override void AddRecipes()

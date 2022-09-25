@@ -19,11 +19,13 @@ using Terraria.DataStructures;
 using static Terraria.ModLoader.PlayerDrawLayer;
 using TerraMica.Content.Buffs.DoT;
 using TerraMica.Content.Projectiles.Weapons;
+using Terraria.GameInput;
 
 namespace TerraMica.Common
 {
     public class TerraMicaPlayer : ModPlayer
     {
+        public bool vanillaLance;
         public bool betterOiled;
         public bool overHeated;
         public bool hellishRebuke;
@@ -53,6 +55,7 @@ namespace TerraMica.Common
 
         public override void UpdateDead()
         {
+            vanillaLance = false;
             betterOiled = false;
             overHeated = false;
             hellishRebuke = false;
@@ -62,6 +65,7 @@ namespace TerraMica.Common
 
         public override void ResetEffects()
         {
+            vanillaLance = false;
             betterOiled = false;
             overHeated = false;
             hellishRebuke = false;
@@ -219,27 +223,74 @@ namespace TerraMica.Common
                 && !Player.setSolar // player isn't wearing solar armor
                 && !Player.mount.Active; // player isn't mounted, since dashes on a mount look weird
         }
+        public static void TryInterruptingItemUsage(Projectile projectile)
+        {
+            Player player = Main.player[projectile.owner];
+            bool flag = false;
+            if (player.heldProj > -1 && Main.projectile[player.heldProj].IsInterruptible(player))
+            {
+                flag = true;
+            }
+            if (!flag)
+            {
+                return;
+            }
+            bool flag2 = false;
+            if (PlayerInput.Triggers.Current.Hotbar1)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar2)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar3)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar4)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar5)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar6)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar7)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar8)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar9)
+            {
+                flag2 = true;
+            }
+            if (PlayerInput.Triggers.Current.Hotbar10)
+            {
+                flag2 = true;
+            }
+            if (flag2 && player.heldProj > -1)
+            {
+                Main.projectile[player.heldProj].Interrupt(player);
+            }
+        }
+
         public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
         {
-            //int lanceWeapons = TerraMicaLists.ModdedLanceItems;
-            //if (Player.inventory[Player.selectedItem].type = lanceWeapons)
-            int Copper = ModContent.ItemType<CopperheadSpear>();// Change this to your item
-            int Bloodstained = ModContent.ItemType<BloodstainedJoustingLance>();
-            int Laser = ModContent.ItemType<LaserLanceCannon>();
-            int Kerosene = ModContent.ItemType<KeroseneStaff>();
-            int Example = ModContent.ItemType<ExampleSword>();
-            int Hallowed = ItemID.HallowJoustingLance;
-            int Shadow = ItemID.ShadowJoustingLance;
-            int Jousting = ItemID.JoustingLance;
-
-            if (Player.inventory[Player.selectedItem].type == Copper && !stickyFingers || Player.inventory[Player.selectedItem].type == Bloodstained && !stickyFingers || Player.inventory[Player.selectedItem].type == Laser && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !overHeated || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers && !overHeated || Player.inventory[Player.selectedItem].type == Example && !stickyFingers || Player.inventory[Player.selectedItem].type == Hallowed && !stickyFingers || Player.inventory[Player.selectedItem].type == Shadow && !stickyFingers || Player.inventory[Player.selectedItem].type == Jousting && !stickyFingers)
+            if (Player.inventory[Player.selectedItem].type == ModContent.ItemType<CopperheadSpear>() && !stickyFingers || Player.inventory[Player.selectedItem].type == ModContent.ItemType<BloodstainedJoustingLance>() && !stickyFingers || Player.inventory[Player.selectedItem].type == ModContent.ItemType<LaserLanceCannon>() && !stickyFingers ||  Player.inventory[Player.selectedItem].type == ModContent.ItemType<KeroseneStaff>() && !stickyFingers || Player.inventory[Player.selectedItem].type == ModContent.ItemType<ExampleSword>() && !stickyFingers)
             {
                 Player.channel = false;
                 Player.itemAnimation = 0;
                 Player.itemAnimationMax = 0;
             }
         }
-
         public override void UpdateLifeRegen()
         {
             if (betterOiled && (Player.onFire || Player.onFire2 || Player.onFire3 || Player.onFrostBurn || Player.onFrostBurn2 || hellishRebuke))
