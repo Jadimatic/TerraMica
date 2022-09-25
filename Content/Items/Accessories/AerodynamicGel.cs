@@ -17,12 +17,13 @@ using System.Drawing.Drawing2D;
 
 namespace TerraMica.Content.Items.Accessories
 {
+    [AutoloadEquip(EquipType.Shoes)]
     public class AerodynamicGel : ModItem
     {
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Sudsy Soap");
-            Tooltip.SetDefault("Increases piercing damage done while moving\n3% increased movement speed");
+            Tooltip.SetDefault("Increases piercing damage done while moving\n3% increased movement speed\nMakes your feet soapy");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 

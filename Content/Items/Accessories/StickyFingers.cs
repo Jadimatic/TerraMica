@@ -13,10 +13,11 @@ using TerraMica.Content.Items.Accessories;
 using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
 using TerraMica.Common;
+using TerraMica.Content.Buffs.Misc;
 
 namespace TerraMica.Content.Items.Accessories
 {
-    [AutoloadEquip(EquipType.HandsOn)]
+    [AutoloadEquip(EquipType.HandsOn, EquipType.HandsOff)]
     public class StickyFingers : ModItem
     {
         public override void SetStaticDefaults()
@@ -25,7 +26,6 @@ namespace TerraMica.Content.Items.Accessories
             Tooltip.SetDefault("Prevents you from getting staggered while using a lance");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
-
 
         public override void SetDefaults()
         {
@@ -38,15 +38,7 @@ namespace TerraMica.Content.Items.Accessories
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<TerraMicaPlayer>().stickyFingers = true;
-        }
-
-        // Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
-        public override void AddRecipes()
-        {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.DirtBlock, 1);
-            recipe.AddTile(TileID.WorkBenches);
-            recipe.Register();
+            player.buffImmune[ModContent.BuffType<StickyFingersBuff>()] = true;
         }
     }
 }

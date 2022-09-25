@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Channels;
+using TerraMica.Content.Buffs.Misc;
 using TerraMica.Content.Items.Accessories;
 using TerraMica.Content.Items.Weapons;
 using TerraMica.Content.Projectiles.Weapons;
@@ -8,6 +10,7 @@ using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Humanizer.In;
 
 namespace TerraMica.Common
 {
@@ -15,7 +18,6 @@ namespace TerraMica.Common
     {
         public override void SetDefaults(Item item)
         {
-            Player player = Main.player[1];
             if (item.type == ItemID.EoCShield)
             {
                 item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
@@ -23,10 +25,6 @@ namespace TerraMica.Common
             if (item.type == ItemID.JoustingLance)
             {
                 item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
-                item.DefaultToSpear(ModContent.ProjectileType<JoustingLanceNewProjectile>(), 3.5f, 24);
-                item.SetWeaponValues(56, 12f);
-                item.SetShopValues(ItemRarityColor.LightRed4, Item.buyPrice(6));
-                item.channel = true;
             }
             if (item.type == ItemID.ShadowJoustingLance)
             {
@@ -36,6 +34,48 @@ namespace TerraMica.Common
             if (item.type == ItemID.HallowJoustingLance)
             {
                 item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
+            }
+        }
+        public override void ModifyShootStats(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            if (item.type == ItemID.HallowJoustingLance)
+            {
+                if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
+                {
+                    item.InterruptChannelOnHurt = true;
+                    item.StopAnimationOnHurt = true;
+                }
+                else
+                {
+                    item.InterruptChannelOnHurt = false;
+                    item.StopAnimationOnHurt = false;
+                }
+            }
+            if (item.type == ItemID.ShadowJoustingLance)
+            {
+                if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
+                {
+                    item.InterruptChannelOnHurt = true;
+                    item.StopAnimationOnHurt = true;
+                }
+                else
+                {
+                    item.InterruptChannelOnHurt = false;
+                    item.StopAnimationOnHurt = false;
+                }
+            }
+            if (item.type == ItemID.JoustingLance)
+            {
+                if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
+                {
+                    item.InterruptChannelOnHurt = true;
+                    item.StopAnimationOnHurt = true;
+                }
+                else
+                {
+                    item.InterruptChannelOnHurt = false;
+                    item.StopAnimationOnHurt = false;
+                }
             }
         }
     }

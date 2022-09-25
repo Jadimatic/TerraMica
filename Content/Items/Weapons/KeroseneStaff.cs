@@ -11,6 +11,8 @@ using Terraria.GameContent;
 using TerraMica.Common;
 using Terraria.DataStructures;
 using TerraMica.Content.Projectiles.Weapons;
+using TerraMica.Content.Buffs.Misc;
+using static Humanizer.In;
 
 namespace TerraMica.Content.Items.Weapons
 {
@@ -27,20 +29,11 @@ namespace TerraMica.Content.Items.Weapons
         public override void SetDefaults()
         {
             Item.CloneDefaults(ItemID.JoustingLance);
-
             Item.DefaultToSpear(ModContent.ProjectileType<KeroseneStaffProjectile>(), 1f, 24);
             Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
             Item.SetWeaponValues(40, 11f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
             //Item.shootSpeed = 0.5f;
             Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(35, 0)); // A special method that sets the rarity and value.
-            Item.channel = true; // Channel is important for our projectile.
-
-            
-
-
-            // This will make sure our projectile completely disappears on hurt.
-            // It's not enough just to stop the channel, as the lance can still deal damage while being stowed
-            // If two players charge at each other, the first one to hit should cancel the other's lance
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
@@ -49,6 +42,16 @@ namespace TerraMica.Content.Items.Weapons
             // This ensures that the velocity of the projectile is always the shootSpeed.
             float inverseMeleeSpeed = 1f / player.GetTotalAttackSpeed(DamageClass.Melee);
             velocity *= inverseMeleeSpeed;
+            if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
+            {
+                Item.InterruptChannelOnHurt = true;
+                Item.StopAnimationOnHurt = true;
+            }
+            else
+            {
+                Item.InterruptChannelOnHurt = false;
+                Item.StopAnimationOnHurt = false;
+            }
         }
 
         // This will allow our Jousting Lance to receive the same modifiers as melee weapons.

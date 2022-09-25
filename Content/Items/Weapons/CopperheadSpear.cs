@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria.GameContent;
+using TerraMica.Content.Buffs.Misc;
 
 
 namespace TerraMica.Content.Items.Weapons
@@ -39,13 +40,7 @@ namespace TerraMica.Content.Items.Weapons
 			Item.SetWeaponValues(14, 6f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
 			Item.shootSpeed = 0.5f;
 			Item.SetShopValues(ItemRarityColor.White0, Item.buyPrice(10, 0)); // A special method that sets the rarity and value.
-			Item.channel = true; // Channel is important for our projectile.
-
-			// This will make sure our projectile completely disappears on hurt.
-			// It's not enough just to stop the channel, as the lance can still deal damage while being stowed
-			// If two players charge at each other, the first one to hit should cancel the other's lance
-			
-		}
+        }
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 		{
@@ -53,7 +48,17 @@ namespace TerraMica.Content.Items.Weapons
 			// This ensures that the velocity of the projectile is always the shootSpeed.
 			float inverseMeleeSpeed = 1f / player.GetTotalAttackSpeed(DamageClass.Melee);
 			velocity *= inverseMeleeSpeed;
-		}
+            if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
+            {
+                Item.InterruptChannelOnHurt = true;
+                Item.StopAnimationOnHurt = true;
+            }
+            else
+            {
+                Item.InterruptChannelOnHurt = false;
+                Item.StopAnimationOnHurt = false;
+            }
+        }
 
 		// This will allow our Jousting Lance to receive the same modifiers as melee weapons.
 		public override bool MeleePrefix() {

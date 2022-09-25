@@ -10,6 +10,7 @@ using Terraria.ModLoader;
 using TerraMica.Common;
 using TerraMica.Content.Projectiles.Weapons;
 using Terraria.Enums;
+using TerraMica.Content.Items.Accessories;
 
 namespace TerraMica.Common
 {
@@ -29,7 +30,7 @@ namespace TerraMica.Common
         }
         public override void SetDefaults(Projectile projectile)
         {
-            Player player = Main.player[projectile.owner];
+            //Player player = Main.player[projectile.owner];
             if (projectile.type == ProjectileID.JoustingLance) //|| projectile.type == ProjectileID.JoustingLance && player.GetModPlayer<TerraMicaPlayer>().stickyFingers)
             {
                 projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>();

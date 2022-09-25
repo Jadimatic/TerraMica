@@ -25,7 +25,7 @@ namespace TerraMica.Content.Projectiles.Weapons
             //DisplayName.SetDefault("Laser Lance Cannon");
             Projectile.netImportant = true; // Sync this projectile if a player joins mid game.
             Projectile.aiStyle = -1;
-            AIType = ProjectileID.JoustingLance;
+            //AIType = ProjectileID.JoustingLance;
             Projectile.alpha = 255; // The transparency of the projectile, 255 for completely transparent. Our projectile will fade in (see the AI() below).
             Projectile.friendly = true; // Player shot projectile. Does damage to enemies but not to friendly Town NPCs.
             Projectile.penetrate = -1; // Infinite penetration. The projectile can hit an infinite number of enemies.
@@ -59,10 +59,9 @@ namespace TerraMica.Content.Projectiles.Weapons
                     }
                 }
             }
-
             Projectile.direction = owner.direction; // Direction will be -1 when facing left and +1 when facing right. 
             owner.heldProj = Projectile.whoAmI; // Set the owner's held projectile to this projectile. heldProj is used so that the projectile will be killed when the player drops or swap items.
-
+            
             int itemAnimationMax = owner.itemAnimationMax;
             // Remember, frames count down from itemAnimationMax to 0
             // Frame at which the lance is fully extended. Hold at this frame before retracting.

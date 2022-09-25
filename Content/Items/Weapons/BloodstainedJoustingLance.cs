@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria.GameContent;
 using TerraMica.Common;
+using TerraMica.Content.Buffs.Misc;
 
 namespace TerraMica.Content.Items.Weapons
 {
@@ -24,14 +25,13 @@ namespace TerraMica.Content.Items.Weapons
 
 		public override void SetDefaults() 
 		{
-			Item.CloneDefaults(ItemID.ShadowJoustingLance);
+			//Item.CloneDefaults(ItemID.ShadowJoustingLance);
 			Item.DefaultToSpear(ModContent.ProjectileType<Projectiles.Weapons.BloodstainedJoustingLanceProjectile>(), 1f, 24);
 			//Item.DamageType = DamageClass.MeleeNoSpeed; // We need to use MeleeNoSpeed here so that attack speed doesn't effect our held projectile.
 			Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
 			Item.SetWeaponValues(115, 12f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
 			Item.SetShopValues(ItemRarityColor.LightRed4, Item.buyPrice(2, 40, 0)); // A special method that sets the rarity and value.
-			Item.channel = true; // Channel is important for our projectile.
-		}
+        }
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
 		{
@@ -39,7 +39,17 @@ namespace TerraMica.Content.Items.Weapons
 			// This ensures that the velocity of the projectile is always the shootSpeed.
 			float inverseMeleeSpeed = 1f / player.GetTotalAttackSpeed(DamageClass.Melee);
 			velocity *= inverseMeleeSpeed;
-		}
+            if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
+            {
+                Item.InterruptChannelOnHurt = true;
+                Item.StopAnimationOnHurt = true;
+            }
+            else
+            {
+                Item.InterruptChannelOnHurt = false;
+                Item.StopAnimationOnHurt = false;
+            }
+        }
 
 		public override bool MeleePrefix()
 		{

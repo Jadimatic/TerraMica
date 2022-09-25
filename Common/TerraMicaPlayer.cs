@@ -282,15 +282,22 @@ namespace TerraMica.Common
             }
         }
 
-        public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        /*public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
         {
-            if (Player.inventory[Player.selectedItem].type == ModContent.ItemType<CopperheadSpear>() && !stickyFingers || Player.inventory[Player.selectedItem].type == ModContent.ItemType<BloodstainedJoustingLance>() && !stickyFingers || Player.inventory[Player.selectedItem].type == ModContent.ItemType<LaserLanceCannon>() && !stickyFingers ||  Player.inventory[Player.selectedItem].type == ModContent.ItemType<KeroseneStaff>() && !stickyFingers || Player.inventory[Player.selectedItem].type == ModContent.ItemType<ExampleSword>() && !stickyFingers)
+            int Copper = ModContent.ItemType<CopperheadSpear>();// Change this to your item
+            int Bloodstained = ModContent.ItemType<BloodstainedJoustingLance>();
+            int Laser = ModContent.ItemType<LaserLanceCannon>();
+            int Kerosene = ModContent.ItemType<KeroseneStaff>();
+            int Example = ModContent.ItemType<ExampleSword>();
+            if (Player.inventory[Player.selectedItem].type == Copper && !stickyFingers || Player.inventory[Player.selectedItem].type == Bloodstained && !stickyFingers || Player.inventory[Player.selectedItem].type == Laser && !stickyFingers || Player.inventory[Player.selectedItem].type == Kerosene && !overHeated || Player.inventory[Player.selectedItem].type == Kerosene && !stickyFingers || Player.inventory[Player.selectedItem].type == Example && !stickyFingers)
             {
                 Player.channel = false;
                 Player.itemAnimation = 0;
                 Player.itemAnimationMax = 0;
+                item.InterruptChannelOnHurt = true;
+                item.StopAnimationOnHurt = true;
             }
-        }
+        }*/
         public override void UpdateLifeRegen()
         {
             if (betterOiled && (Player.onFire || Player.onFire2 || Player.onFire3 || Player.onFrostBurn || Player.onFrostBurn2 || hellishRebuke))

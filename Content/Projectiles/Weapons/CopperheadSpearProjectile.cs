@@ -54,8 +54,8 @@ namespace TerraMica.Content.Projectiles.Weapons
 			Player owner = Main.player[Projectile.owner]; // Get the owner of the projectile.
 			Projectile.direction = owner.direction; // Direction will be -1 when facing left and +1 when facing right. 
 			owner.heldProj = Projectile.whoAmI; // Set the owner's held projectile to this projectile. heldProj is used so that the projectile will be killed when the player drops or swap items.
-
-			int itemAnimationMax = owner.itemAnimationMax;
+            
+            int itemAnimationMax = owner.itemAnimationMax;
 			// Remember, frames count down from itemAnimationMax to 0
 			// Frame at which the lance is fully extended. Hold at this frame before retracting.
 			// Scale factor (0.34f) means the last 34% of the animation will be used for retracting.
