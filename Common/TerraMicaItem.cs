@@ -10,7 +10,6 @@ using Terraria;
 using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
-using static Humanizer.In;
 
 namespace TerraMica.Common
 {
@@ -38,44 +37,20 @@ namespace TerraMica.Common
         }
         public override void ModifyShootStats(Item item, Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            if (item.type == ItemID.HallowJoustingLance)
+            if (item.type == ItemID.HallowJoustingLance && player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
             {
-                if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
-                {
-                    item.InterruptChannelOnHurt = true;
-                    item.StopAnimationOnHurt = true;
-                }
-                else
-                {
-                    item.InterruptChannelOnHurt = false;
-                    item.StopAnimationOnHurt = false;
-                }
+                item.InterruptChannelOnHurt = false;
+                item.StopAnimationOnHurt = false;
             }
-            if (item.type == ItemID.ShadowJoustingLance)
+            if (item.type == ItemID.ShadowJoustingLance && player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
             {
-                if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
-                {
-                    item.InterruptChannelOnHurt = true;
-                    item.StopAnimationOnHurt = true;
-                }
-                else
-                {
-                    item.InterruptChannelOnHurt = false;
-                    item.StopAnimationOnHurt = false;
-                }
+                item.InterruptChannelOnHurt = false;
+                item.StopAnimationOnHurt = false;
             }
-            if (item.type == ItemID.JoustingLance)
+            if (item.type == ItemID.JoustingLance && player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
             {
-                if (!player.buffImmune[ModContent.BuffType<StickyFingersBuff>()])
-                {
-                    item.InterruptChannelOnHurt = true;
-                    item.StopAnimationOnHurt = true;
-                }
-                else
-                {
-                    item.InterruptChannelOnHurt = false;
-                    item.StopAnimationOnHurt = false;
-                }
+                item.InterruptChannelOnHurt = false;
+                item.StopAnimationOnHurt = false;
             }
         }
     }

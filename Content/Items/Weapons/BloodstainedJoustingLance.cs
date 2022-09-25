@@ -31,6 +31,7 @@ namespace TerraMica.Content.Items.Weapons
 			Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
 			Item.SetWeaponValues(115, 12f, 0); // A special method that sets the damage, knockback, and bonus critical strike chance.
 			Item.SetShopValues(ItemRarityColor.LightRed4, Item.buyPrice(2, 40, 0)); // A special method that sets the rarity and value.
+			Item.channel = true;
         }
 
 		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
