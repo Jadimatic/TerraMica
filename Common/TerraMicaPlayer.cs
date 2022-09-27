@@ -43,14 +43,14 @@ namespace TerraMica.Common
         // The initial velocity.  10 velocity is about 37.5 tiles/second or 50 mph
         public const float rusticDashVelocity = 8f;
 
-        public const int starSilkDashCooldown = 300; // Time (frames) between starting dashes. If this is shorter than DashDuration you can start a new dash before an old one has finished
-        public const int starSilkDashDuration = 90; // Duration of the dash afterimage effect in frames
+        public const int starSilkDashCooldown = 50; // Time (frames) between starting dashes. If this is shorter than DashDuration you can start a new dash before an old one has finished
+        public const int starSilkDashDuration = 35; // Duration of the dash afterimage effect in frames
 
         // The initial velocity.  10 velocity is about 37.5 tiles/second or 50 mph
         public const float starSilkDashVelocity = 10f;
 
         public const int manCooldown = 50; // Time (frames) between starting manes. If this is shorter than manDuration you can start a new man before an old one has finished
-        public const int manDuration = 90; // Duration of the man afterimage effect in frames
+        public const int manDuration = 35; // Duration of the man afterimage effect in frames
 
         // The initial velocity.  10 velocity is about 37.5 tiles/second or 50 mph
         public const float manVelocity = 15f;
@@ -142,16 +142,6 @@ namespace TerraMica.Common
                     switch (DashDir)
                     {
                         // Only apply the dash velocity if our current speed in the wanted direction is less than DashVelocity
-                        case DashUp when Player.velocity.Y > -rusticDashVelocity:
-                        case DashDown when Player.velocity.Y < rusticDashVelocity:
-                            {
-                                // Y-velocity is set here
-                                // If the direction requested was DashUp, then we adjust the velocity to make the dash appear "faster" due to gravity being immediately in effect
-                                // This adjustment is roughly 1.3x the intended dash velocity
-                                float dashDirection = DashDir == DashDown ? 1 : -1.3f;
-                                newVelocity.Y = dashDirection * rusticDashVelocity / 1.5f;
-                                break;
-                            }
                         case DashLeft when Player.velocity.X > -rusticDashVelocity:
                         case DashRight when Player.velocity.X < rusticDashVelocity:
                             {
@@ -232,7 +222,6 @@ namespace TerraMica.Common
                                     }
                                     Main.dust[starDust2].velocity -= Player.velocity * 0.1f;
                                     Main.dust[starDust2].noGravity = true;
-                                    Main.dust[starDust2].noLight = true;
                                 }
                                 for (int b = 0; b < 3; b++)
                                 {
@@ -241,7 +230,6 @@ namespace TerraMica.Common
                                     Main.dust[starDust3].velocity *= 0.6f;
                                     Main.dust[starDust3].velocity += Player.velocity * 0.8f;
                                     Main.dust[starDust3].noGravity = true;
-                                    Main.dust[starDust3].noLight = true;
                                 }
                                 for (int c = 0; c < 3; c++)
                                 {
@@ -250,7 +238,6 @@ namespace TerraMica.Common
                                     Main.dust[starDust4].velocity *= 0.6f;
                                     Main.dust[starDust4].velocity -= Player.velocity * 0.8f;
                                     Main.dust[starDust4].noGravity = true;
-                                    Main.dust[starDust4].noLight = true;
                                 }
                                 SoundEngine.PlaySound(SoundID.DoubleJump, Player.position);
                                 SoundEngine.PlaySound(SoundID.Item4, Player.position);
@@ -320,12 +307,12 @@ namespace TerraMica.Common
 
                 if (manTimer > 0)
                 {
+                    /*if (Player.velocity.Y != 0)
+                    {
+                        Player.armorEffectDrawShadowEOCShield = true;
+                    }*/
                     Player.armorEffectDrawShadowEOCShield = true;
                     manTimer--;
-                }
-                else if (manTreads && Player.velocity.Y == 0)
-                {
-                    Player.armorEffectDrawShadowEOCShield = false;
                 }
                 Player.eocDash = manTimer;
             }
@@ -415,61 +402,54 @@ namespace TerraMica.Common
             {
                 DashHit = false;
             }
-            if (manTimer > 0 && manTreads)
+            if (manTimer > 0)
             {
-                if (manTimer > 0)
+                if (manHit == false)
                 {
-                    if (manHit == false)
+                    Rectangle rectangle = new((int)((double)Player.position.X + (double)Player.velocity.X * 0.5 - 4.0), (int)((double)Player.position.Y + (double)Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
+                    for (int i = 0; i < 200; i++)
                     {
-                        Rectangle rectangle = new((int)((double)Player.position.X + (double)Player.velocity.X * 0.5 - 4.0), (int)((double)Player.position.Y + (double)Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
-                        for (int i = 0; i < 200; i++)
+                        NPC nPC = Main.npc[i];
+                        if (!nPC.active || nPC.dontTakeDamage || nPC.friendly || (nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f)) || !Player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC))
                         {
-                            NPC nPC = Main.npc[i];
-                            if (!nPC.active || nPC.dontTakeDamage || nPC.friendly || (nPC.aiStyle == 112 && !(nPC.ai[2] <= 1f)) || !Player.CanNPCBeHitByPlayerOrPlayerProjectile(nPC))
+                            continue;
+                        }
+                        Rectangle rect = nPC.getRect();
+                        if (rectangle.Intersects(rect) && (nPC.noTileCollide || Player.CanHit(nPC)))
+                        {
+                            float num = Player.GetTotalDamage(ModContent.GetInstance<PiercingDamageClass>()).ApplyTo(25f);
+                            float num12 = Player.GetTotalKnockback(DamageClass.Melee).ApplyTo(1f);
+                            bool crit = false;
+                            if ((float)Main.rand.Next(100) < Player.GetTotalCritChance(ModContent.GetInstance<PiercingDamageClass>()))
                             {
-                                continue;
+                                crit = true;
                             }
-                            Rectangle rect = nPC.getRect();
-                            if (rectangle.Intersects(rect) && (nPC.noTileCollide || Player.CanHit(nPC)))
+                            int num20 = Player.direction;
+                            if (Player.velocity.X < 0f)
                             {
-                                float num = Player.GetTotalDamage(ModContent.GetInstance<PiercingDamageClass>()).ApplyTo(25f);
-                                float num12 = Player.GetTotalKnockback(DamageClass.Melee).ApplyTo(1f);
-                                bool crit = false;
-                                if ((float)Main.rand.Next(100) < Player.GetTotalCritChance(ModContent.GetInstance<PiercingDamageClass>()))
-                                {
-                                    crit = true;
-                                }
-                                int num20 = Player.direction;
-                                if (Player.velocity.X < 0f)
-                                {
-                                    num20 = -1;
-                                }
-                                if (Player.velocity.X > 0f)
-                                {
-                                    num20 = 1;
-                                }
-                                if (Player.whoAmI == Main.myPlayer)
-                                {
-                                    Player.ApplyDamageToNPC(nPC, (int)num, num12, num20, crit);
-                                }
-                                manTimer = 10;
-                                manDelay = 30;
-                                Player.velocity.X *= -1f;
-                                Player.velocity.Y *= -1f;
-                                Player.GiveImmuneTimeForCollisionAttack(4);
-                                manHit = true;
+                                num20 = -1;
                             }
+                            if (Player.velocity.X > 0f)
+                            {
+                                num20 = 1;
+                            }
+                            if (Player.whoAmI == Main.myPlayer)
+                            {
+                                Player.ApplyDamageToNPC(nPC, (int)num, num12, num20, crit);
+                            }
+                            manTimer = 10;
+                            manDelay = 30;
+                            Player.velocity.X *= -1f;
+                            Player.velocity.Y *= -1f;
+                            Player.GiveImmuneTimeForCollisionAttack(4);
+                            manHit = true;
                         }
                     }
-                    else if ((!Player.controlLeft || !(Player.velocity.X < 0f)) && (!Player.controlRight || !(Player.velocity.X > 0f)))
-                    {
-                        Player.velocity.X *= 0.95f; //slows player down after man
-                    }
                 }
-                else
-                {
-                    manHit = false;
-                }
+            }
+            else
+            {
+                manHit = false;
             }
         }
 
@@ -489,6 +469,7 @@ namespace TerraMica.Common
         {
             return manTreads
                 && !Player.mount.Active; // player isn't mounted, since dashes on a mount look weird
+                //&& Player.velocity.Y != 0; // player isn't on the ground
         }
 
         /*public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
