@@ -17,9 +17,10 @@ namespace TerraMica.Content.Projectiles.Weapons
 {
     internal class KeroseneStaffProjectile : ModProjectile
     {
-        public int charge = 8;
-        public int ProjDelay = 15; // frames remaining till we can fire a projectile again
-        public int ProjDamage = 50; // frames remaining till we can fire a projectile againr
+
+        public int charge;
+        public int ProjDelay = 15; // Frames remaining until we can fire a projectile again
+        public int ProjDamage = 50; // Damage done by the Jet Fuel Ghost
         public override void SetDefaults()
         {
             //DisplayName.SetDefault("Laser Lance Cannon");
@@ -36,10 +37,19 @@ namespace TerraMica.Content.Projectiles.Weapons
             Projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>(); // Set the damage to piercing damage.
         }
 
+        public override void OnSpawn(IEntitySource source)
+        {
+            Player owner = Main.player[Projectile.owner]; // Get the owner of the projectile.
+            TerraMicaPlayer mp = owner.GetModPlayer<TerraMicaPlayer>();// Gets access to ModPlayer variables.
+            charge = mp.chargeStorage;
+        }
+
         public override void AI()
         {
             Player owner = Main.player[Projectile.owner]; // Get the owner of the projectile.
-            if (Main.myPlayer == Projectile.owner && !owner.buffImmune[ModContent.BuffType<OverheatTimer>()])
+            TerraMicaPlayer mp = owner.GetModPlayer<TerraMicaPlayer>();// Gets access to ModPlayer variables.
+
+            if (Main.myPlayer == Projectile.owner && !owner.buffImmune[ModContent.BuffType<OverheatTimer>()] && owner.magmaStone == false)
             {
                 if (ProjDelay > 0)
                 {
@@ -59,9 +69,29 @@ namespace TerraMica.Content.Projectiles.Weapons
                     }
                 }
             }
+            else if (Main.myPlayer == Projectile.owner && !owner.buffImmune[ModContent.BuffType<OverheatTimer>()] && owner.magmaStone == true)
+            {
+                if (ProjDelay > 0)
+                {
+                    ProjDelay--;
+                }
+                if (ProjDelay <= 0)
+                {
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(null), Projectile.Center, Projectile.velocity * +12, ModContent.ProjectileType<JetFuelGhostAblaze>(), ProjDamage, 1f, Main.myPlayer, -1, -1);
+                    SoundEngine.PlaySound(Main.rand.NextBool() ? SoundID.Item157 : SoundID.Item158, Projectile.position);
+                    ProjDelay = 30;
+                    charge--;
+                    if (charge <= 0)
+                    {
+                        owner.AddBuff(ModContent.BuffType<Overheated>(), 900);
+                        SoundEngine.PlaySound(SoundID.Item20, Main.player[Projectile.owner].position);
+                        charge = 8;
+                    }
+                }
+            }
             Projectile.direction = owner.direction; // Direction will be -1 when facing left and +1 when facing right. 
             owner.heldProj = Projectile.whoAmI; // Set the owner's held projectile to this projectile. heldProj is used so that the projectile will be killed when the player drops or swap items.
-            
+
             int itemAnimationMax = owner.itemAnimationMax;
             // Remember, frames count down from itemAnimationMax to 0
             // Frame at which the lance is fully extended. Hold at this frame before retracting.
@@ -75,6 +105,7 @@ namespace TerraMica.Content.Projectiles.Weapons
             // If the Jousting Lance is no longer being used, kill the projectile.
             if (owner.ItemAnimationEndingOrEnded)
             {
+                mp.chargeStorage = charge;//saves the value of charge before the projectile dies.
                 Projectile.Kill();
                 return;
             }

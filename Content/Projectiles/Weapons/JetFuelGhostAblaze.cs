@@ -10,10 +10,11 @@ using TerraMica.Common;
 using Terraria.Utilities;
 using ReLogic.Utilities;
 using TerraMica.Content.Buffs.Misc;
+using TerraMica.Content.Buffs.DoT;
 
 namespace TerraMica.Content.Projectiles.Weapons
 {
-    public class JetFuelGhost : ModProjectile
+    public class JetFuelGhostAblaze : ModProjectile
     {
         public const float lifeTime = 170f;
         ref float ProjLife => ref Projectile.ai[0];
@@ -41,11 +42,10 @@ namespace TerraMica.Content.Projectiles.Weapons
             Projectile.penetrate = 3;
             Projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>(); // Set the damage to piercing damage.
         }
-        /* Uncomment this if you want to modify color, why you would do that we have no idea.
         public override Color? GetAlpha(Color lightColor)
         {
             return new Color(127, 127, 127, 0) * Projectile.Opacity;
-        }*/
+        }
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -92,17 +92,11 @@ namespace TerraMica.Content.Projectiles.Weapons
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            if (!target.buffImmune[BuffID.Oiled])
-            {
-                target.AddBuff(ModContent.BuffType<BetterOiled>(), Main.rand.Next(8, 18) * 30);
-            }
+            target.AddBuff(ModContent.BuffType<HellishRebuke>(), Main.rand.Next(8, 18) * 30);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            if (!target.buffImmune[BuffID.Oiled])
-            {
-                target.AddBuff(ModContent.BuffType<BetterOiled>(), Main.rand.Next(8, 18) * 30);
-            }
+            target.AddBuff(ModContent.BuffType<HellishRebuke>(), Main.rand.Next(8, 18) * 30);
         }
 
         public override void AI()
@@ -167,13 +161,12 @@ namespace TerraMica.Content.Projectiles.Weapons
             if (ProjLife >= 3 && ProjLife < (lifeTime * 0.8f))//if projectile has existed for three frames but hasnt already existed for about 3/4th's of lifeTime
             {
                 int num = 175;
-                Color newColor = new(0, 0, 0, 140);
                 Vector2 vector2 = Projectile.position;
                 vector2.X -= 2f;
                 vector2.Y -= 2f;
                 if (Main.rand.NextBool(2))
                 {
-                    Dust dust = Dust.NewDustDirect(vector2, Projectile.width + 4, Projectile.height + 2, DustID.TintableDust, 0f, 0f, num, newColor, 1.4f);
+                    Dust dust = Dust.NewDustDirect(vector2, Projectile.width + 4, Projectile.height + 2, DustID.Torch, 0f, 0f, num, default, 1.4f);
                     if (Main.rand.NextBool(2))
                     {
                         dust.alpha += 25;

@@ -4,11 +4,11 @@ using System;
 using Terraria.ModLoader;
 using TerraMica.Common;
 
-namespace terramica
+namespace TerraMica
 {
 	public class TerraMica : Mod
 	{
-		public const string ASSET_PATH = "terramica/Assets/";
+		public const string ASSET_PATH = "TerraMica/Assets/";
 
         public override void Load()
         {

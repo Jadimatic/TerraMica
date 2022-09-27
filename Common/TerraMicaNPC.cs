@@ -11,8 +11,8 @@ namespace TerraMica.Common
     {
         public override bool InstancePerEntity => true;
 
-        public bool hellishRebuke = false;
         public int lifeRegenExpectedLossPerSecond = -1;
+        public bool hellishRebuke = false;
 
         public override void ResetEffects(NPC npc)
         {

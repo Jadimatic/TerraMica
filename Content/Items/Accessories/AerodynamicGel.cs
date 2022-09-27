@@ -47,7 +47,8 @@ namespace TerraMica.Content.Items.Accessories
             Recipe recipe = CreateRecipe();
             recipe.AddIngredient(ItemID.PinkGel, 5);
             recipe.AddIngredient(ItemID.Cloud, 3);
-            recipe.AddTile(TileID.WorkBenches);
+            recipe.AddTile(TileID.Solidifier);
+            recipe.AddCondition(Recipe.Condition.NearWater);
             recipe.Register();
         }
     }

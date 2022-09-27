@@ -1,25 +1,13 @@
 ﻿using Terraria.ID;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using TerraMica.Content.Buffs.Misc;
-using TerraMica.Content.Items.Accessories;
-using TerraMica.Content.Items.Weapons;
 using Terraria;
 using Terraria.ModLoader;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using Color = Microsoft.Xna.Framework.Color;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.DataStructures;
-using static Terraria.ModLoader.PlayerDrawLayer;
 using TerraMica.Content.Buffs.DoT;
 using TerraMica.Content.Projectiles.Weapons;
-using Terraria.GameInput;
+using TerraMica.Content.Projectiles;
+using Terraria.DataStructures;
 
 namespace TerraMica.Common
 {
@@ -31,6 +19,7 @@ namespace TerraMica.Common
         public bool hellishRebuke;
         public bool stickyFingers;
         public bool aeroGel;
+        public bool bambooSet;
         public int lifeRegenExpectedLossPerSecond = -1;
         // These indicate what direction is what in the timer arrays used
         public const int DashDown = 0;
@@ -53,6 +42,9 @@ namespace TerraMica.Common
         public int DashTimer = 0; // frames remaining in the dash
         public bool DashHit = false; // if contact is made
 
+        // The fields related to the Kerosene Lance
+        public int chargeStorage;
+
         public override void UpdateDead()
         {
             vanillaLance = false;
@@ -61,6 +53,7 @@ namespace TerraMica.Common
             hellishRebuke = false;
             stickyFingers = false;
             aeroGel = false;
+            bambooSet = false;
         }
 
         public override void ResetEffects()
@@ -71,6 +64,7 @@ namespace TerraMica.Common
             hellishRebuke = false;
             stickyFingers = false;
             aeroGel = false;
+            bambooSet = false;
             // Reset our equipped flag. If the accessory is equipped somewhere, ExampleShield.UpdateAccessory will be called and set the flag before PreUpdateMovement
             rusticShield = false;
 
@@ -159,13 +153,21 @@ namespace TerraMica.Common
             }
         }
 
+        public override void PreUpdate()
+        {
+            if (aeroGel && Player.velocity.X != 0)
+            {
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position.Y + 40, 0f, 0, ModContent.ProjectileType<SoapyBubbles>(), ProjectileID.Sunfury, 0, Main.myPlayer);
+            }
+        }
+
         public override void PostUpdate()
         {
             if (DashTimer > 0)
             {
                 if (DashHit == false)
                 {
-                    Rectangle rectangle = new((int)((double)Player.position.X + (double)Player.velocity.X * 0.5 - 4.0), (int)((double)Player.position.Y + (double)Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
+                    Rectangle rectangle = new((int)(Player.position.X + Player.velocity.X * 0.5 - 4.0), (int)(Player.position.Y + Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
                     for (int i = 0; i < 200; i++)
                     {
                         NPC nPC = Main.npc[i];
@@ -223,7 +225,8 @@ namespace TerraMica.Common
                 && !Player.setSolar // player isn't wearing solar armor
                 && !Player.mount.Active; // player isn't mounted, since dashes on a mount look weird
         }
-        public static void TryInterruptingItemUsage(Projectile projectile)
+
+        /*public static void TryInterruptingItemUsage(Projectile projectile) // Remove this?
         {
             Player player = Main.player[projectile.owner];
             bool flag = false;
@@ -280,7 +283,7 @@ namespace TerraMica.Common
             {
                 Main.projectile[player.heldProj].Interrupt(player);
             }
-        }
+        }*/
 
         /*public override void Hurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
         {
@@ -395,21 +398,29 @@ namespace TerraMica.Common
         }
         public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
         {
+            if ((item.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && bambooSet && Main.rand.NextBool(1 + (1 / 2)))
+                target.AddBuff(BuffID.Poisoned, 60 * Main.rand.Next(3, 7), false);
             if ((item.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated)
                 target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
         }
         public override void OnHitPvp(Item item, Player target, int damage, bool crit)
         {
+            if ((item.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && bambooSet && Main.rand.NextBool(1 + (1 / 2)))
+                target.AddBuff(BuffID.Poisoned, 60 * Main.rand.Next(3, 7), false);
             if ((item.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated)
                 target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
         }
         public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
         {
+            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && bambooSet && Main.rand.NextBool(1 + (1 / 2)))
+                target.AddBuff(BuffID.Poisoned, 60 * Main.rand.Next(3, 7), false);
             if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated && !(proj.type == ModContent.ProjectileType<JetFuelGhost>()))
                 target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
         }
         public override void OnHitPvpWithProj(Projectile proj, Player target, int damage, bool crit)
         {
+            if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && bambooSet && Main.rand.NextBool(1 + (1 / 2)))
+                target.AddBuff(BuffID.Poisoned, 60 * Main.rand.Next(3, 7), false);
             if ((proj.DamageType == ModContent.GetInstance<PiercingDamageClass>()) && overHeated && !(proj.type == ModContent.ProjectileType<JetFuelGhost>()))
                 target.AddBuff(ModContent.BuffType<HellishRebuke>(), 60 * Main.rand.Next(3, 7), false);
         }

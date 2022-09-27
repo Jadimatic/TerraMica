@@ -2,6 +2,7 @@
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.GameContent.Creative;
+using TerraMica.Common;
 
 namespace TerraMica.Content.Items.Armor
 {
@@ -10,8 +11,10 @@ namespace TerraMica.Content.Items.Armor
 	[AutoloadEquip(EquipType.Head)]
 	public class ExampleHelmet : ModItem
 	{
-		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("This is a modded helmet.");
+		public override void SetStaticDefaults() 
+		{
+            DisplayName.SetDefault("Bamboo Helmet");
+            Tooltip.SetDefault("Placeholder Text\n3% increased piercing critical strike chance");
 
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 3;
 
@@ -23,24 +26,32 @@ namespace TerraMica.Content.Items.Armor
 			// ArmorIDs.Head.Sets.DrawsBackHairWithoutHeadgear[Item.headSlot] = true; 
 		}
 
-		public override void SetDefaults() {
+		public override void SetDefaults() 
+		{
 			Item.width = 18; // Width of the item
 			Item.height = 18; // Height of the item
 			Item.value = Item.sellPrice(gold: 1); // How many coins the item is worth
-			Item.rare = ItemRarityID.Green; // The rarity of the item
-			Item.defense = 5; // The amount of defense the item will give when equipped
+			Item.rare = ItemRarityID.White; // The rarity of the item
+			Item.defense = 2; // The amount of defense the item will give when equipped
 		}
 
-		// IsArmorSet determines what armor pieces are needed for the setbonus to take effect
-		public override bool IsArmorSet(Item head, Item body, Item legs) {
+		public override void UpdateEquip(Player player)
+		{
+            player.GetCritChance(ModContent.GetInstance<PiercingDamageClass>()) += 3f;
+        }
+        // IsArmorSet determines what armor pieces are needed for the setbonus to take effect
+        public override bool IsArmorSet(Item head, Item body, Item legs) 
+		{
 			return body.type == ModContent.ItemType<ExampleBreastplate>() && legs.type == ModContent.ItemType<ExampleLeggings>();
 		}
 
 		// UpdateArmorSet allows you to give set bonuses to the armor.
-		public override void UpdateArmorSet(Player player) {
-			player.setBonus = "Increases dealt damage by 20%"; // This is the setbonus tooltip
-			player.GetDamage(DamageClass.Generic) += 0.2f; // Increase dealt damage for all weapon classes by 20%
-		}
+		public override void UpdateArmorSet(Player player) 
+		{
+			player.setBonus = "Reduces damage taken by 8%\nPiercing attacks have a 50% chance to poison enemies"; // This is the setbonus tooltip
+			player.endurance += 0.08f;
+            player.GetModPlayer<TerraMicaPlayer>().bambooSet = true;
+        }
 
 		// Please see Content/ExampleRecipes.cs for a detailed explanation of recipe creation.
 		public override void AddRecipes()
