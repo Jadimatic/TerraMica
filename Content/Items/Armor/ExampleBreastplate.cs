@@ -13,7 +13,7 @@ namespace TerraMica.Content.Items.Armor
 	{
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Bamboo Chestplate");
+			DisplayName.SetDefault("Bamboo Breastplate");
 			Tooltip.SetDefault("Placeholder Text\n3% increased piercing damage");
 			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 		}

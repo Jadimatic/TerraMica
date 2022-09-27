@@ -21,6 +21,8 @@ namespace TerraMica.Content.Items.Weapons
             Item.shoot = ModContent.ProjectileType<BambooJavelinProjectile>();
             Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
             Item.damage = 5;
+            Item.shootSpeed = 7.5f;
+            Item.UseSound = SoundID.Item1;
         }
     }
 }

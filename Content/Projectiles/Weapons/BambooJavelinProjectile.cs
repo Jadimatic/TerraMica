@@ -21,7 +21,7 @@ namespace TerraMica.Content.Projectiles.Weapons
             Projectile.CloneDefaults(ProjectileID.JavelinFriendly);
             AIType = ProjectileID.JavelinFriendly;
             Projectile.DamageType = ModContent.GetInstance<PiercingDamageClass>();
-            Projectile.penetrate += 3;
+            Projectile.penetrate = 3;
         }
 
         public override void Kill(int timeLeft)

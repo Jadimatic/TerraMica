@@ -1,21 +1,11 @@
-﻿using Terraria.DataStructures;
-using Terraria.Enums;
-using Terraria.GameContent;
-using Terraria.GameContent.Events;
-using Terraria.GameContent.UI;
+﻿using Terraria.Enums;
 using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
-using Terraria.UI;
-using Terraria.Utilities;
 using Terraria;
-using TerraMica.Content.Items.Accessories;
-using Microsoft.Xna.Framework;
 using Terraria.GameContent.Creative;
 using TerraMica.Common;
-using System.Drawing.Drawing2D;
 
-namespace TerraMica.Content.Items.Accessories
+namespace TerraMica.Content.Items.Accessories.Movement
 {
     [AutoloadEquip(EquipType.Shoes)]
     public class AerodynamicGel : ModItem

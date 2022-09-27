@@ -92,11 +92,11 @@ namespace TerraMica.Content.Projectiles.Weapons
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.AddBuff(ModContent.BuffType<HellishRebuke>(), Main.rand.Next(8, 18) * 30);
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(8, 18) * 30);
         }
         public override void OnHitPvp(Player target, int damage, bool crit)
         {
-            target.AddBuff(ModContent.BuffType<HellishRebuke>(), Main.rand.Next(8, 18) * 30);
+            target.AddBuff(BuffID.OnFire, Main.rand.Next(8, 18) * 30);
         }
 
         public override void AI()

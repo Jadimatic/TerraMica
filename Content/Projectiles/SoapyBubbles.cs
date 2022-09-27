@@ -1,11 +1,13 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using TerraMica.Content.Dusts;
 
 namespace TerraMica.Content.Projectiles
 {
     public class SoapyBubbles : ModProjectile
     {
+        public override string Texture => "TerraMica/Content/Projectiles/InvisibleProj";
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Soapy Bubbles");
@@ -27,8 +29,8 @@ namespace TerraMica.Content.Projectiles
             Projectile.tileCollide = false;
             if (Main.rand.NextBool(15))
             {
-                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, DustID.BubbleBlock, 0f, 0f);
-                Main.dust[dust].scale = 2f;
+                int dust = Dust.NewDust(Projectile.position + Projectile.velocity, Projectile.width, Projectile.height, ModContent.DustType<SoapyBubblesDust>(), 0f, 0f);
+                //Main.dust[dust].scale = 1.5f;
                 Main.dust[dust].noGravity = true;
             }
             return false;
