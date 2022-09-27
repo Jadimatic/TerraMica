@@ -51,6 +51,7 @@ namespace TerraMica.Common
 
         public const int manCooldown = 50; // Time (frames) between starting manes. If this is shorter than manDuration you can start a new man before an old one has finished
         public const int manDuration = 35; // Duration of the man afterimage effect in frames
+        public const int manDuration = 36; // Duration of the man afterimage effect in frames
 
         // The initial velocity.  10 velocity is about 37.5 tiles/second or 50 mph
         public const float manVelocity = 15f;
@@ -63,9 +64,9 @@ namespace TerraMica.Common
 
         // The fields related to the dash accessory
         public bool rusticShield;
-        public int DashDelay = 0; // frames remaining till we can dash again
-        public int DashTimer = 0; // frames remaining in the dash
-        public bool DashHit = false; // if contact is made
+        public int rusticDashDelay = 0; // frames remaining till we can dash again
+        public int rusticDashTimer = 0; // frames remaining in the dash
+        public bool rusticDashHit = false; // if contact is made
 
         // The fields related to the Man Treaders accessory
         public bool manTreads;
@@ -135,7 +136,7 @@ namespace TerraMica.Common
             if (rusticShield)
             {
                 // if the player can use our dash, has double tapped in a direction, and our dash isn't currently on cooldown
-                if (CanUseDash() && DashDir != -1 && DashDelay == 0)
+                if (CanUseDash() && DashDir != -1 && rusticDashDelay == 0)
                 {
                     Vector2 newVelocity = Player.velocity;
 
@@ -155,18 +156,18 @@ namespace TerraMica.Common
                     }
 
                     // start our dash
-                    DashDelay = rusticDashCooldown;
-                    DashTimer = rusticDashDuration;
+                    rusticDashDelay = rusticDashCooldown;
+                    rusticDashTimer = rusticDashDuration;
                     Player.velocity = newVelocity;
 
                     // Here you'd be able to set an effect that happens when the dash first activates
                     // Some examples include:  the larger smoke effect from the Master Ninja Gear and Tabi
                 }
 
-                if (DashDelay > 0)
-                    DashDelay--;
+                if (rusticDashDelay > 0)
+                    rusticDashDelay--;
 
-                if (DashTimer > 0)
+                if (rusticDashTimer > 0)
                 { // dash is active
                   // This is where we set the afterimage effect.  You can replace these two lines with whatever you want to happen during the dash
                   // Some examples include:  spawning dust where the player is, adding buffs, making the player immune, etc.
@@ -175,8 +176,8 @@ namespace TerraMica.Common
                     Player.armorEffectDrawShadowEOCShield = true;
 
                     // count down frames remaining
-                    DashTimer--;
-                    Player.eocDash = DashTimer;
+                    rusticDashTimer--;
+                    Player.eocDash = rusticDashTimer;
                 }
             }
             if (starSilk)
@@ -261,10 +262,8 @@ namespace TerraMica.Common
 
                 if (starSilkTimer > 0)
                 {
-                    if (Player.velocity.Y != 0)
-                    {
-                        Player.immune = true;
-                    }
+                    Player.immune = true;
+                    Player.immuneTime = starSilkDashDuration - 10;
                     Player.armorEffectDrawShadowEOCShield = true;
                     starSilkTimer--;
                 }
@@ -279,18 +278,19 @@ namespace TerraMica.Common
                     switch (DashDir)
                     {
                         // Only apply the man velocity if our current speed in the wanted direction is less than manVelocity
+                        // Only apply the dash velocity if our current speed in the wanted direction is less than DashVelocity
                         case DashDown when Player.velocity.Y < manVelocity:
                             {
                                 Player.armorEffectDrawShadowEOCShield = true;
                                 // Y-velocity is set here
-                                // If the direction requested was manUp, then we adjust the velocity to make the man appear "faster" due to gravity being immediately in effect
-                                // This adjustment is roughly 1.3x the intended man velocity
-                                float manDirection = DashDir == DashDown ? 1 : -1.3f;
-                                newVelocity.Y = manDirection * manVelocity / 1.5f;
+                                // If the direction requested was DashUp, then we adjust the velocity to make the dash appear "faster" due to gravity being immediately in effect
+                                // This adjustment is roughly 1.3x the intended dash velocity
+                                float dashDirection = DashDir == DashDown ? 1 : -1.3f;
+                                newVelocity.Y = dashDirection * manVelocity / 1.5f;
                                 break;
                             }
                         default:
-                            return; // not moving fast enough, so don't start our man
+                            return; // not moving fast enough, so don't start our dash
                     }
 
                     // start our man
@@ -349,9 +349,9 @@ namespace TerraMica.Common
 
         public override void PostUpdate()
         {
-            if (DashTimer > 0 && rusticShield)
+            if (rusticDashTimer > 0 && rusticShield)
             {
-                if (DashHit == false)
+                if (rusticDashHit == false)
                 {
                     Rectangle rectangle = new((int)(Player.position.X + Player.velocity.X * 0.5 - 4.0), (int)(Player.position.Y + Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
                     for (int i = 0; i < 200; i++)
@@ -384,12 +384,12 @@ namespace TerraMica.Common
                             {
                                 Player.ApplyDamageToNPC(nPC, (int)num, num12, num20, crit);
                             }
-                            DashTimer = 10;
-                            DashDelay = 30;
+                            rusticDashTimer = 10;
+                            rusticDashDelay = 30;
                             Player.velocity.X *= -1f;
                             Player.velocity.Y *= -1f;
                             Player.GiveImmuneTimeForCollisionAttack(4);
-                            DashHit = true;
+                            rusticDashHit = true;
                         }
                     }
                 }
@@ -400,7 +400,7 @@ namespace TerraMica.Common
             }
             else
             {
-                DashHit = false;
+                rusticDashHit = false;
             }
             if (manTimer > 0)
             {
@@ -437,6 +437,15 @@ namespace TerraMica.Common
                             {
                                 Player.ApplyDamageToNPC(nPC, (int)num, num12, num20, crit);
                             }
+                            }
+                            if (Player.velocity.X > 0f)
+                            {
+                                num20 = 1;
+                            }
+                            if (Player.whoAmI == Main.myPlayer)
+                            {
+                                Player.ApplyDamageToNPC(nPC, (int)num, num12, num20, crit);
+                            }
                             manTimer = 10;
                             manDelay = 30;
                             Player.velocity.X *= -1f;
@@ -445,6 +454,10 @@ namespace TerraMica.Common
                             manHit = true;
                         }
                     }
+                }
+                else if ((!Player.controlLeft || !(Player.velocity.X < 0f)) && (!Player.controlRight || !(Player.velocity.X > 0f)))
+                {
+                    Player.velocity.X *= 0.95f; //slows player down after dash
                 }
             }
             else
@@ -545,20 +558,21 @@ namespace TerraMica.Common
         }*/
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-			if (hellishRebuke) 
+            if (hellishRebuke)
             {
-				if (Main.rand.NextBool(4) && drawInfo.shadow == 0f) {
-					int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f, 2f), Player.width + 4, Player.height + 4, DustID.Torch, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 3f);
-					Main.dust[dust].noGravity = true;
-					Main.dust[dust].velocity *= 1.8f;
-					Main.dust[dust].velocity.Y -= 0.5f;
+                if (Main.rand.NextBool(4) && drawInfo.shadow == 0f)
+                {
+                    int dust = Dust.NewDust(drawInfo.Position - new Vector2(2f, 2f), Player.width + 4, Player.height + 4, DustID.Torch, Player.velocity.X * 0.4f, Player.velocity.Y * 0.4f, 100, default, 3f);
+                    Main.dust[dust].noGravity = true;
+                    Main.dust[dust].velocity *= 1.8f;
+                    Main.dust[dust].velocity.Y -= 0.5f;
                     drawInfo.DustCache.Add(dust);
                 }
-				r *= 1f;
-				g *= 0.3f;
-				b *= 0.1f;
-				fullBright = true;
-			}
+                r *= 1f;
+                g *= 0.3f;
+                b *= 0.1f;
+                fullBright = true;
+            }
             if (betterOiled && !Main.rand.NextBool(3)) // Please re-do this if you have time so it's more like the one above lol
             {
                 int num = 175;
