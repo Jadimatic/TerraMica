@@ -1,16 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Terraria;
-using Terraria.GameContent;
+﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using TerraMica.Common;
-using TerraMica.Content.Projectiles.Weapons;
-using Terraria.Enums;
-using TerraMica.Content.Items.Accessories;
+using TerraMica.Content.Items.Accessories.Movement;
 
 namespace TerraMica.Common
 {
@@ -20,7 +11,7 @@ namespace TerraMica.Common
         public override void ModifyDamageScaling(Projectile projectile, ref float damageScale)
         {
             Player player = Main.player[projectile.owner];
-            if (player.GetModPlayer<TerraMicaPlayer>().aeroGel)
+            if (player.GetModPlayer<AeroGelPlayer>().aeroGel)
             {
                 if (projectile.DamageType == ModContent.GetInstance<PiercingDamageClass>())
                 {
