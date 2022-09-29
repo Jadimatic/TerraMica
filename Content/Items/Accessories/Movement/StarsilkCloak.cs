@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace TerraMica.Content.Items.Accessories.Movement
 {
-    [AutoloadEquip(EquipType.Front)]
+    [AutoloadEquip(EquipType.Back)]
     public class StarsilkCloak : ModItem
     {
         public override void SetStaticDefaults()

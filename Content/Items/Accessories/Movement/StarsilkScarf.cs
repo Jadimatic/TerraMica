@@ -43,11 +43,12 @@ namespace TerraMica.Content.Items.Accessories.Movement
     public class StarSilkPlayer : ModPlayer
     {
         public bool starSilk;
-        public const int starSilkDashCooldown = 50; // Time (frames) between starting dashes. If this is shorter than DashDuration you can start a new dash before an old one has finished
-        public const int starSilkDashDuration = 35; // Duration of the dash afterimage effect in frames
+        public int starDustTimer = 20;
+        public const int starSilkDashCooldown = (int)starSilkDashVelocity / 2 * 10; // Time (frames) between starting dashes. If this is shorter than DashDuration you can start a new dash before an old one has finished
+        public const int starSilkDashDuration = (int)starSilkDashVelocity / 2 * 7; // Duration of the dash afterimage effect in frames
         public int starSilkDelay = 0; // frames remaining till we can dash again
         public int starSilkTimer = 0; // frames remaining in the dash
-        public const float starSilkDashVelocity = 10f; // The initial velocity.  10 velocity is about 37.5 tiles/second or 50 mph
+        public const float starSilkDashVelocity = 12.5f; // The initial velocity.  10 velocity is about 37.5 tiles/second or 50 mph
         public int DashDir = -1; // The direction the player has double tapped.  Defaults to -1 for no dash double tap
         // These indicate what direction is what in the timer arrays used
         public const int DashDown = 0;
@@ -157,7 +158,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
             if (starSilkTimer > 0)
             {
                 Player.immune = true;
-                Player.immuneTime = starSilkDashDuration - 10;
+                Player.immuneTime = starSilkDashDuration - (starSilkDashDuration / 7 * 2); //Sets the immunity time to starSilkDashDuration minus about 30% of starSilkDashDuration.
                 Player.armorEffectDrawShadowEOCShield = true;
                 Player.eocDash = starSilkTimer;
                 starSilkTimer--;

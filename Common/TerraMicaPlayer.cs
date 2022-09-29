@@ -11,12 +11,10 @@ namespace TerraMica.Common
 {
     public class TerraMicaPlayer : ModPlayer
     {
-        public bool vanillaLance;
         public bool betterOiled;
         public bool overHeated;
         public bool hellishRebuke;
         public bool stickyFingers;
-        public int starDustTimer = 20;
         public bool bambooSet;
         public int lifeRegenExpectedLossPerSecond = -1;
 
@@ -25,7 +23,6 @@ namespace TerraMica.Common
 
         public override void UpdateDead()
         {
-            vanillaLance = false;
             betterOiled = false;
             overHeated = false;
             hellishRebuke = false;
@@ -33,10 +30,8 @@ namespace TerraMica.Common
             bambooSet = false;
         }
 
-        public override void ResetEffects()
+        public override void ResetEffects() // Reset our equipped flag. If the accessory is equipped somewhere, ExampleShield.UpdateAccessory will be called and set the flag before PreUpdateMovement
         {
-            // Reset our equipped flag. If the accessory is equipped somewhere, ExampleShield.UpdateAccessory will be called and set the flag before PreUpdateMovement
-            vanillaLance = false;
             betterOiled = false;
             overHeated = false;
             hellishRebuke = false;

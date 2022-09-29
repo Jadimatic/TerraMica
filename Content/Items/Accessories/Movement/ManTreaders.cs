@@ -170,8 +170,8 @@ namespace TerraMica.Content.Items.Accessories.Movement
                             }
                             manTimer = 10;
                             manDelay = 30;
-                            Player.velocity.X *= -1f;
-                            Player.velocity.Y *= -1f;
+                            Player.velocity.X *= -0.85f;
+                            Player.velocity.Y *= -0.85f;
                             Player.GiveImmuneTimeForCollisionAttack(4);
                             manHit = true;
                         }
