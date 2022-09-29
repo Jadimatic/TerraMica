@@ -5,6 +5,10 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
+using static Terraria.ModLoader.PlayerDrawLayer;
+using TerraMica.Content.Buffs.Misc;
+using static Humanizer.In;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace TerraMica.Content.Items.Accessories.Movement
 {
@@ -29,6 +33,18 @@ namespace TerraMica.Content.Items.Accessories.Movement
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<StarSilkPlayer>().starSilk = true;
+            if (player.HasBuff(ModContent.BuffType<AstralDislocation1>()))
+            {
+                player.statDefense = (int)(player.statDefense * 0.85f);
+            }
+            else if (player.HasBuff(ModContent.BuffType<AstralDislocation2>()))
+            {
+                player.statDefense = (int)(player.statDefense * 0.8f);
+            }
+            else if (player.HasBuff(ModContent.BuffType<AstralDislocation3>()))
+            {
+                player.statDefense = (int)(player.statDefense * 0.7f);
+            }
         }
 
         public override void AddRecipes()
@@ -94,6 +110,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
                             // This adjustment is roughly 1.3x the intended dash velocity
                             float dashDirection = DashDir == DashDown ? 1 : -1.3f;
                             newVelocity.Y = dashDirection * starSilkDashVelocity / 1.5f;
+                            Player.fallStart = (int)(Player.position.Y / 16f);
                             int num = Player.height;
                             if (Player.gravDir == -1f) // The following code is adapted from vanilla, so it may be messy
                             {
@@ -145,7 +162,6 @@ namespace TerraMica.Content.Items.Accessories.Movement
                     default:
                         return; // not moving fast enough, so don't start our dash
                 }
-
                 // start our dash
                 starSilkDelay = starSilkDashCooldown;
                 starSilkTimer = starSilkDashDuration;
@@ -159,9 +175,22 @@ namespace TerraMica.Content.Items.Accessories.Movement
             {
                 Player.immune = true;
                 Player.immuneTime = starSilkDashDuration - (starSilkDashDuration / 7 * 2); //Sets the immunity time to starSilkDashDuration minus about 30% of starSilkDashDuration.
-                Player.armorEffectDrawShadowEOCShield = true;
+                //Player.armorEffectDrawShadowEOCShield = true;
+                Player.armorEffectDrawOutlines = true;
                 Player.eocDash = starSilkTimer;
                 starSilkTimer--;
+                if (!Player.buffImmune[ModContent.BuffType<AstralDislocationCheck>()])
+                {
+                    Player.AddBuff(ModContent.BuffType<AstralDislocation1>(), 300);
+                }
+                else if (Player.HasBuff(ModContent.BuffType<AstralDislocation1>()) && DashDir != -1)
+                {
+                    Player.AddBuff(ModContent.BuffType<AstralDislocation2>(), 300);
+                }
+                if (Player.HasBuff(ModContent.BuffType<AstralDislocation2>()) && Player.buffImmune[ModContent.BuffType<AstralDislocation1>()] && DashDir != -1)
+                {
+                    Player.AddBuff(ModContent.BuffType<AstralDislocation3>(), 300);
+                }
             }
         }
 

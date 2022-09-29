@@ -14,7 +14,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Astralweave Mantle");
-            Tooltip.SetDefault("Allows the player to magically float upwards\nWhile floating, you are granted temporary immunity\nDouble tap UP to float");
+            Tooltip.SetDefault("Allows the player to magically float up, left, or right\nWhile floating, you are granted temporary immunity\nDouble tap a direction to float");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -22,7 +22,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
         {
             Item.width = 24;
             Item.height = 24;
-            Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(45));
+            Item.SetShopValues(ItemRarityColor.Orange3, Item.buyPrice(45));
             Item.accessory = true;
         }
 
@@ -105,59 +105,15 @@ namespace TerraMica.Content.Items.Accessories.Movement
                         {
                             float dashDirection = DashDir == DashRight ? 1 : -1;
                             newVelocity.X = dashDirection * astralWeaveDashVelocity;
-                            /*int num = Player.height;
-                            if (Player.gravDir == -1f) // The following code is adapted from vanilla, so it may be messy
-                            {
-                                num = -6;
-                            }
-                            int starDust = Dust.NewDust(new Vector2(Player.position.X - 4f, Player.position.Y + (float)num), Player.width + 8, 4, DustID.YellowStarDust, (0f - Player.velocity.X) * 0.5f, Player.velocity.Y * 0.5f, 100, default, 1.5f);
-                            Main.dust[starDust].velocity.X = Main.dust[starDust].velocity.X * 0.5f - Player.velocity.X * 0.1f;
-                            Main.dust[starDust].velocity.Y = Main.dust[starDust].velocity.Y * 0.5f - Player.velocity.Y * 0.3f;
-                            int num2 = Player.height - 6;
-                            if (Player.gravDir == -1f)
-                            {
-                                num2 = 6;
-                            }
-                            for (int a = 0; a < 2; a++)
-                            {
-                                int starDust2 = Dust.NewDust(new Vector2(Player.position.X, Player.position.Y + (float)num2), Player.width, 12, DustID.YellowStarDust, Player.velocity.X * 0.3f, Player.velocity.Y * 0.3f);
-                                Main.dust[starDust2].velocity *= 0.1f;
-                                if (a == 0)
-                                {
-                                    Main.dust[starDust2].velocity += Player.velocity * 0.03f;
-                                }
-                                else
-                                {
-                                    Main.dust[starDust2].velocity -= Player.velocity * 0.03f;
-                                }
-                                Main.dust[starDust2].velocity -= Player.velocity * 0.1f;
-                                Main.dust[starDust2].noGravity = true;
-                            }
-                            for (int b = 0; b < 3; b++)
-                            {
-                                int starDust3 = Dust.NewDust(new Vector2(Player.position.X, Player.position.Y + (float)num2), Player.width, 12, DustID.YellowStarDust, Player.velocity.X * 0.3f, Player.velocity.Y * 0.3f);
-                                Main.dust[starDust3].fadeIn = 1.5f;
-                                Main.dust[starDust3].velocity *= 0.6f;
-                                Main.dust[starDust3].velocity += Player.velocity * 0.8f;
-                                Main.dust[starDust3].noGravity = true;
-                            }
-                            for (int c = 0; c < 3; c++)
-                            {
-                                int starDust4 = Dust.NewDust(new Vector2(Player.position.X, Player.position.Y + (float)num2), Player.width, 12, DustID.YellowStarDust, Player.velocity.X * 0.3f, Player.velocity.Y * 0.3f);
-                                Main.dust[starDust4].fadeIn = 1.5f;
-                                Main.dust[starDust4].velocity *= 0.6f;
-                                Main.dust[starDust4].velocity -= Player.velocity * 0.8f;
-                                Main.dust[starDust4].noGravity = true;
-                            }*/
                             for (int index = 0; index < 20; ++index)
                             {
-                                int dust = Dust.NewDust(Player.position, Player.width, Player.height, DustID.YellowStarDust, 0f, 0f, 0, default, 1.5f);
-                                Main.dust[dust].scale *= 1f;
-                                Main.dust[dust].position.X = Main.dust[dust].position.X + Main.rand.Next(-5, 6);
-                                Main.dust[dust].position.Y = Main.dust[dust].position.Y + Main.rand.Next(-5, 6);
-                                Main.dust[dust].velocity *= 0.2f;
-                                Main.dust[dust].scale *= 1f + Main.rand.Next(20) * 0.01f;
-                                Main.dust[dust].noGravity = true;
+                                int starDust0 = Dust.NewDust(Player.position, Player.width, Player.height, DustID.YellowStarDust, 0f, 0f, 0, default, 1.5f);
+                                Main.dust[starDust0].scale *= 1f;
+                                Main.dust[starDust0].position.X = Main.dust[starDust0].position.X + Main.rand.Next(-5, 6);
+                                Main.dust[starDust0].position.Y = Main.dust[starDust0].position.Y + Main.rand.Next(-5, 6);
+                                Main.dust[starDust0].velocity *= 0.2f;
+                                Main.dust[starDust0].scale *= 1f + Main.rand.Next(20) * 0.01f;
+                                Main.dust[starDust0].noGravity = true;
                             }
                             SoundEngine.PlaySound(SoundID.DoubleJump, Player.position);
                             SoundEngine.PlaySound(SoundID.Item4, Player.position);
@@ -170,6 +126,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
                             // This adjustment is roughly 1.3x the intended dash velocity
                             float dashDirection = DashDir == DashDown ? 1 : -1.3f;
                             newVelocity.Y = dashDirection * astralWeaveDashVelocity / 1.5f;
+                            Player.fallStart = (int)(Player.position.Y / 16f);
                             int num = Player.height;
                             if (Player.gravDir == -1f) // The following code is adapted from vanilla, so it may be messy
                             {
@@ -243,7 +200,8 @@ namespace TerraMica.Content.Items.Accessories.Movement
             {
                 Player.immune = true;
                 Player.immuneTime = astralWeaveDashDuration - (astralWeaveDashDuration / 7 * 2); //Sets the immunity time to starSilkDashDuration minus about 30% of starSilkDashDuration.
-                Player.armorEffectDrawShadowEOCShield = true;
+                //Player.armorEffectDrawShadowEOCShield = true;
+                Player.armorEffectDrawOutlines = true;
                 Player.eocDash = astralWeaveTimer;
                 astralWeaveTimer--;
             }
