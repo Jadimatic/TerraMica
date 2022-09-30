@@ -27,7 +27,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
             Item.rare = ItemRarityID.Green;
             Item.accessory = true;
             Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
-            Item.damage = 25;
+            Item.damage = 15;
             Item.knockBack = 1f;
         }
 
@@ -125,16 +125,15 @@ namespace TerraMica.Content.Items.Accessories.Movement
 
             if (manTimer > 0)
             {
-                Player.armorEffectDrawShadowEOCShield = true;
-                Player.eocDash = manTimer;
                 manTimer--;
             }
         }
 
         public override void PostUpdate()
         {
-            if (manTimer > 0)
+            if (manTimer > 0 && Player.velocity.Y != 0)
             {
+                Player.armorEffectDrawShadowLokis = true;
                 if (manHit == false)
                 {
                     Rectangle rectangle = new((int)((double)Player.position.X + (double)Player.velocity.X * 0.5 - 4.0), (int)((double)Player.position.Y + (double)Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);

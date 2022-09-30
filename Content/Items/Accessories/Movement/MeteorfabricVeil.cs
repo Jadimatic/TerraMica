@@ -142,12 +142,18 @@ namespace TerraMica.Content.Items.Accessories.Movement
 
             if (meteorFabricTimer > 0)
             {
+                Player.armorEffectDrawShadowLokis = true;
                 Player.immune = true;
                 Player.immuneTime = meteorFabricDashDuration - (meteorFabricDashDuration / 7 * 2); //Sets the immunity time to starSilkDashDuration minus about 30% of starSilkDashDuration.
-                //Player.armorEffectDrawShadowEOCShield = true;
-                Player.armorEffectDrawOutlines = true;
-                Player.eocDash = meteorFabricTimer;
                 meteorFabricTimer--;
+            }
+        }
+
+        public override void PostUpdate()
+        {
+            if (meteorFabricTimer > 0)
+            {
+                Player.armorEffectDrawShadowLokis = true;
             }
         }
 

@@ -121,16 +121,13 @@ namespace TerraMica.Content.Items.Accessories
                 rusticDashDelay--;
 
             if (rusticDashTimer > 0)
-            { // dash is active
-              // This is where we set the afterimage effect.  You can replace these two lines with whatever you want to happen during the dash
-              // Some examples include:  spawning dust where the player is, adding buffs, making the player immune, etc.
-              // Here we take advantage of "player.eocDash" and "player.armorEffectDrawShadowEOCShield" to get the Shield of Cthulhu's afterimage effect
-
-                Player.armorEffectDrawShadowEOCShield = true;
-
+            {
+                // dash is active
+                // This is where we set the afterimage effect.  You can replace these two lines with whatever you want to happen during the dash
+                // Some examples include:  spawning dust where the player is, adding buffs, making the player immune, etc.
+                
                 // count down frames remaining
                 rusticDashTimer--;
-                Player.eocDash = rusticDashTimer;
             }
         }
 
@@ -138,6 +135,7 @@ namespace TerraMica.Content.Items.Accessories
         {
             if (rusticDashTimer > 0 && rusticShield)
             {
+                Player.armorEffectDrawShadowLokis = true;
                 if (rusticDashHit == false)
                 {
                     Rectangle rectangle = new((int)(Player.position.X + Player.velocity.X * 0.5 - 4.0), (int)(Player.position.Y + Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
@@ -197,6 +195,11 @@ namespace TerraMica.Content.Items.Accessories
                 && Player.dashType == 0 // player doesn't have Tabi or EoCShield equipped (give priority to those dashes)
                 && !Player.setSolar // player isn't wearing solar armor
                 && !Player.mount.Active; // player isn't mounted, since dashes on a mount look weird
+        }
+
+        public override void UpdateVisibleAccessories()
+        {
+
         }
     }
 }

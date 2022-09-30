@@ -11,8 +11,8 @@ namespace TerraMica.Content.Projectiles.Weapons
 {
     public class CopperheadSpearProjectile : ModProjectile
     {
-        public const float Length = 54/*72f*/;
-        public float tipDist = Length + 8;
+        public int Length => TextureAssets.Projectile[Type].Value.Height;
+        public int tipDist => Length + 8;
 
         public override void SetStaticDefaults()
         {

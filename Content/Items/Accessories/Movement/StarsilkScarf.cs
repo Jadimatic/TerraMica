@@ -5,10 +5,7 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
-using static Terraria.ModLoader.PlayerDrawLayer;
 using TerraMica.Content.Buffs.Misc;
-using static Humanizer.In;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace TerraMica.Content.Items.Accessories.Movement
 {
@@ -173,24 +170,30 @@ namespace TerraMica.Content.Items.Accessories.Movement
 
             if (starSilkTimer > 0)
             {
+                Player.armorEffectDrawShadowLokis = true;
                 Player.immune = true;
                 Player.immuneTime = starSilkDashDuration - (starSilkDashDuration / 7 * 2); //Sets the immunity time to starSilkDashDuration minus about 30% of starSilkDashDuration.
-                //Player.armorEffectDrawShadowEOCShield = true;
-                Player.armorEffectDrawOutlines = true;
-                Player.eocDash = starSilkTimer;
                 starSilkTimer--;
                 if (!Player.buffImmune[ModContent.BuffType<AstralDislocationCheck>()])
                 {
                     Player.AddBuff(ModContent.BuffType<AstralDislocation1>(), 300);
                 }
-                else if (Player.HasBuff(ModContent.BuffType<AstralDislocation1>()) && DashDir != -1)
+                else if (Player.HasBuff(ModContent.BuffType<AstralDislocation1>()) && DashDir == DashUp)
                 {
                     Player.AddBuff(ModContent.BuffType<AstralDislocation2>(), 300);
                 }
-                if (Player.HasBuff(ModContent.BuffType<AstralDislocation2>()) && Player.buffImmune[ModContent.BuffType<AstralDislocation1>()] && DashDir != -1)
+                if (Player.HasBuff(ModContent.BuffType<AstralDislocation2>()) && Player.buffImmune[ModContent.BuffType<AstralDislocation1>()] && DashDir == DashUp)
                 {
                     Player.AddBuff(ModContent.BuffType<AstralDislocation3>(), 300);
                 }
+            }
+        }
+
+        public override void PostUpdate()
+        {
+            if (starSilkTimer > 0)
+            {
+                Player.armorEffectDrawShadowLokis = true;
             }
         }
 

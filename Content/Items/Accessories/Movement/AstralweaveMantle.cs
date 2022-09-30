@@ -200,13 +200,17 @@ namespace TerraMica.Content.Items.Accessories.Movement
             {
                 Player.immune = true;
                 Player.immuneTime = astralWeaveDashDuration - (astralWeaveDashDuration / 7 * 2); //Sets the immunity time to starSilkDashDuration minus about 30% of starSilkDashDuration.
-                //Player.armorEffectDrawShadowEOCShield = true;
-                Player.armorEffectDrawOutlines = true;
-                Player.eocDash = astralWeaveTimer;
                 astralWeaveTimer--;
             }
         }
 
+        public override void PostUpdate()
+        {
+            if (astralWeaveTimer > 0)
+            {
+                Player.armorEffectDrawShadowLokis = true;
+            }
+        }
         private bool CanUseAstralweave()
         {
             return astralWeave
