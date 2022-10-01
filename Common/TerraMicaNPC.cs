@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using TerraMica.Content.NPCs.Meteor;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;

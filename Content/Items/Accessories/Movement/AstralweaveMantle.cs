@@ -14,7 +14,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Astralweave Mantle");
-            Tooltip.SetDefault("Allows the player to magically float up, left, or right\nWhile floating, you are granted temporary immunity\nDouble tap a direction to float");
+            Tooltip.SetDefault("Allows the player to astrally dislocate up, left, or right\nWhile dislocating, you are granted temporary immunity\nDouble tap a direction to dislocate");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -34,9 +34,9 @@ namespace TerraMica.Content.Items.Accessories.Movement
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.Silk, 5);
-            recipe.AddIngredient(ItemID.FallenStar, 3);
-            recipe.AddTile(TileID.Loom);
+            recipe.AddIngredient(ModContent.ItemType<StarsilkScarf>());
+            recipe.AddIngredient(ModContent.ItemType<FireCape>());
+            recipe.AddTile(TileID.TinkerersWorkbench);
             recipe.Register();
         }
     }

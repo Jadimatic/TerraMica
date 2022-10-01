@@ -5,16 +5,17 @@ using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.Audio;
 using Microsoft.Xna.Framework;
+using TerraMica.Content.Items.Materials;
 
 namespace TerraMica.Content.Items.Accessories.Movement
 {
     [AutoloadEquip(EquipType.Front, EquipType.Back)]
-    public class MeteorfabricVeil : ModItem
+    public class FireCape : ModItem
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Meteorfabric Veil");
-            Tooltip.SetDefault("Allows the player to magically float left or right\nWhile floating, you are granted temporary immunity\nDouble tap a direction to float");
+            DisplayName.SetDefault("Fire Cape");
+            Tooltip.SetDefault("Allows the player to astrally dislocate to the left or right\nWhile dislocating, you are granted temporary immunity\nDouble tap a direction to dislocate");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
@@ -34,8 +35,8 @@ namespace TerraMica.Content.Items.Accessories.Movement
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.Silk, 5);
-            recipe.AddIngredient(ItemID.FallenStar, 3);
+            recipe.AddIngredient(ItemID.AncientCloth, 5);
+            recipe.AddIngredient(ModContent.ItemType<MeteorDust>(), 10);
             recipe.AddTile(TileID.Loom);
             recipe.Register();
         }

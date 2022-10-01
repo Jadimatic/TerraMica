@@ -8,42 +8,42 @@ using TerraMica.Common;
 
 namespace TerraMica.Content.Items.Accessories
 {
-	[AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
-	public class RusticShield : ModItem
-	{
+    [AutoloadEquip(EquipType.Shield)] // Load the spritesheet you create as a shield for the player when it is equipped.
+    public class RusticShield : ModItem
+    {
         public override void SetStaticDefaults()
-		{
+        {
             DisplayName.SetDefault("Rustic Shield");
             Tooltip.SetDefault("Allows the player to dash into the enemy\nDouble tap a direction");
-			CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
-		}
+            CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
+        }
 
-		public override void SetDefaults()
-		{
-			Item.width = 24;
-			Item.height = 28;
+        public override void SetDefaults()
+        {
+            Item.width = 24;
+            Item.height = 28;
             Item.SetShopValues(ItemRarityColor.Blue1, Item.buyPrice(20, 0));
             Item.accessory = true;
-			Item.defense = 1;
-			Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
-			Item.damage = 8;
-			Item.knockBack = 9f;
-		}
+            Item.defense = 1;
+            Item.DamageType = ModContent.GetInstance<PiercingDamageClass>();
+            Item.damage = 8;
+            Item.knockBack = 9f;
+        }
 
-		public override void UpdateAccessory(Player player, bool hideVisual)
-		{
-			player.GetModPlayer<RusticShieldPlayer>().rusticShield = true;
-		}
+        public override void UpdateAccessory(Player player, bool hideVisual)
+        {
+            player.GetModPlayer<RusticShieldPlayer>().rusticShield = true;
+        }
 
-		public override void AddRecipes()
-		{
-			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.Wood, 1);
+        public override void AddRecipes()
+        {
+            Recipe recipe = CreateRecipe();
+            recipe.AddIngredient(ItemID.Wood, 1);
             recipe.AddIngredient(ItemID.DirtBlock, 1);
             recipe.AddTile(TileID.WorkBenches);
-			recipe.Register();
-		}
-	}
+            recipe.Register();
+        }
+    }
     public class RusticShieldPlayer : ModPlayer
     {
         public const int rusticDashCooldown = 50; // Time (frames) between starting dashes. If this is shorter than DashDuration you can start a new dash before an old one has finished
@@ -121,13 +121,16 @@ namespace TerraMica.Content.Items.Accessories
                 rusticDashDelay--;
 
             if (rusticDashTimer > 0)
-            {
-                // dash is active
-                // This is where we set the afterimage effect.  You can replace these two lines with whatever you want to happen during the dash
-                // Some examples include:  spawning dust where the player is, adding buffs, making the player immune, etc.
-                
+            { // dash is active
+              // This is where we set the afterimage effect.  You can replace these two lines with whatever you want to happen during the dash
+              // Some examples include:  spawning dust where the player is, adding buffs, making the player immune, etc.
+              // Here we take advantage of "player.eocDash" and "player.armorEffectDrawShadowEOCShield" to get the Shield of Cthulhu's afterimage effect
+
+                Player.armorEffectDrawShadowEOCShield = true;
+
                 // count down frames remaining
                 rusticDashTimer--;
+                Player.eocDash = rusticDashTimer;
             }
         }
 
@@ -135,7 +138,6 @@ namespace TerraMica.Content.Items.Accessories
         {
             if (rusticDashTimer > 0 && rusticShield)
             {
-                Player.armorEffectDrawShadowLokis = true;
                 if (rusticDashHit == false)
                 {
                     Rectangle rectangle = new((int)(Player.position.X + Player.velocity.X * 0.5 - 4.0), (int)(Player.position.Y + Player.velocity.Y * 0.5 - 4.0), Player.width + 8, Player.height + 8);
@@ -195,11 +197,6 @@ namespace TerraMica.Content.Items.Accessories
                 && Player.dashType == 0 // player doesn't have Tabi or EoCShield equipped (give priority to those dashes)
                 && !Player.setSolar // player isn't wearing solar armor
                 && !Player.mount.Active; // player isn't mounted, since dashes on a mount look weird
-        }
-
-        public override void UpdateVisibleAccessories()
-        {
-
         }
     }
 }

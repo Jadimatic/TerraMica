@@ -40,9 +40,16 @@ namespace TerraMica.Content.Items.Accessories.Movement
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.DirtBlock, 1);
-            recipe.AddTile(TileID.WorkBenches);
+            recipe.AddIngredient(ItemID.Silk, 12);
+            recipe.AddIngredient(ItemID.RottenChunk, 6);
+            recipe.AddTile(TileID.Loom);
             recipe.Register();
+
+            Recipe recipe2 = CreateRecipe();
+            recipe2.AddIngredient(ItemID.Silk, 12);
+            recipe2.AddIngredient(ItemID.Vertebrae, 6);
+            recipe2.AddTile(TileID.Loom);
+            recipe2.Register();
         }
     }
     public class ManTreadersPlayer : ModPlayer

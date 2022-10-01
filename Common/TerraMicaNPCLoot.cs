@@ -16,6 +16,12 @@ namespace TerraMica.Common
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<MeteorDust>(), 1, 1, 3));
             }
+            if (npc.type == NPCID.GiantCursedSkull)
+            {
+                npcLoot.RemoveWhere(
+                    rule => rule is DropBasedOnExpertMode drop && drop.ruleForNormalMode is CommonDrop normalDropRule && normalDropRule.itemId == ItemID.ShadowJoustingLance
+                );
+            }
         }
     }
 }

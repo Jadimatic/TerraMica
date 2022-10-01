@@ -26,7 +26,7 @@ namespace TerraMica.Content.Items.Materials
         {
             CreateRecipe(5)
                 .AddIngredient(ItemID.MeteoriteBar, 1)
-                .AddTile(TileID.Hellforge)
+                .AddTile(TileID.Furnaces)
                 .Register();
         }
     }

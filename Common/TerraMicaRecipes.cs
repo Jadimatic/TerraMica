@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using TerraMica.Content.Items.Materials;
 using Terraria;
 using Terraria.ID;
 using Terraria.Localization;
@@ -68,6 +69,15 @@ namespace TerraMica.Common
             shadowJoustingLanceRecipe.AddIngredient(ItemID.SoulofNight, 10);
             shadowJoustingLanceRecipe.AddTile(TileID.MythrilAnvil);
             shadowJoustingLanceRecipe.Register();
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            // The following recipe makes Meteorite out of 3 MeteorDust. //
+            ////////////////////////////////////////////////////////////////////////////////////
+
+            Recipe meteoriteRecipe = Recipe.Create(ItemID.Meteorite, 1);
+            meteoriteRecipe.AddIngredient(ModContent.ItemType<MeteorDust>(), 3);
+            meteoriteRecipe.AddTile(TileID.Furnaces);
+            meteoriteRecipe.Register();
 
             // Source for ItemIDs: https://github.com/tModLoader/tModLoader/wiki/Vanilla-Item-IDs
         }

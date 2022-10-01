@@ -11,7 +11,7 @@ namespace TerraMica.Common
         // For information about how to apply stat bonuses to specific damage classes, please instead refer to ExampleMod/Content/Items/Accessories/ExampleStatBonusAccessory.
         public override void SetStaticDefaults()
         {
-            ((DamageClass)this).ClassName.SetDefault("piercing damage");
+            ClassName.SetDefault("piercing damage");
         }
         public override StatInheritanceData GetModifierInheritance(DamageClass damageClass)
         {

@@ -14,7 +14,7 @@ namespace TerraMica.Content.Items.Accessories.Movement
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Starsilk Cloak");
-            Tooltip.SetDefault("Allows the player to magically float upwards\nWhile floating, you are granted temporary immunity\nCauses stars to fall after taking damage\nDouble tap UP to float");
+            Tooltip.SetDefault("Allows the player to astrally dislocate upwards\nWhile dislocating, you are granted temporary immunity\nCauses stars to fall after taking damage\nDouble tap UP to dislocate");
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
         }
 
